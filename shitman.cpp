@@ -38,7 +38,6 @@ int main() {
     deck1.blanda();
     
     for(int i = 0; i < 52; i++) {
-        //cout << deck1.deck[i] << " ";
         cout << deck1.draw() << " ";
     }
     cout << endl;
