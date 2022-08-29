@@ -1,6 +1,7 @@
 #include <iostream>
 #include <algorithm>
 #include <random>
+#include "player.h"
 
 using namespace std;
 
@@ -32,7 +33,6 @@ struct Deck {
 
 };
 
-int ()
 int main() {
     
     Deck deck1;
@@ -42,6 +42,15 @@ int main() {
         cout << deck1.draw() << " ";
     }
     cout << endl;
+
+    //Player stuff
+    int hand[3] = {1, 2, 3};
+    int open[3] = {4, 5, 6};
+    int last_played = 0;
+
+    Player p1(1);
+    cout << p1.Do_Turn(hand, open, last_played) << endl;
+    
 
     return 0;
 }
