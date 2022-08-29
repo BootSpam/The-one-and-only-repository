@@ -38,6 +38,7 @@ int main() {
     Deck deck1;
     deck1.blanda();
     
+    cout << "Deck ";
     for(int i = 0; i < 52; i++) {
         cout << deck1.draw() << " ";
     }
