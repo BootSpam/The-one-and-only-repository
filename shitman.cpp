@@ -32,6 +32,7 @@ struct Deck {
 
 };
 
+int ()
 int main() {
     
     Deck deck1;
