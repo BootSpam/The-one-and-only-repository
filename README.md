@@ -1,2 +1,2 @@
 # BootSpam-Crush-The-ShitMan
-YES
+The test branch may contain any files relevent to the project
