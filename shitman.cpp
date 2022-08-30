@@ -6,9 +6,22 @@
 using namespace std;
 
 struct Deck {
+
+    //Draw pile
     int deck[52];
     int index;
+
+    //Player one
+    int p1_hidden[3];
+    int p1_open[3];
+    int p1_hand[3];
+
+    //Player two
+    int p2_hidden[3];
+    int p2_open[3];
+    int p2_hand[3];
     
+    //Elementary functions
     Deck() {
         for(int i = 0; i < 52; i++) {
             deck[i] = i % 13;
@@ -30,26 +43,41 @@ struct Deck {
         return deck[index -1];
     }
 
+    void deal() {
+        
+        p1_hidden[0] = draw();  p2_hidden[0] = draw();
+        p1_hidden[1] = draw();  p2_hidden[1] = draw();
+        p1_hidden[2] = draw();  p2_hidden[2] = draw();
+
+        p1_open[0] = draw();    p2_open[0] = draw();
+        p1_open[1] = draw();    p2_open[1] = draw();
+        p1_open[2] = draw();    p2_open[2] = draw();
+
+        p1_hand[0] = draw();    p2_hand[0] = draw();
+        p1_hand[1] = draw();    p2_hand[1] = draw();
+        p1_hand[2] = draw();    p2_hand[2] = draw();
+
+    }
 
 };
 
 int main() {
     
-    Deck deck1;
-    deck1.blanda();
+    Deck d;
+    d.blanda();
+    d.deal();
     
+    cout << "Deck ";
     for(int i = 0; i < 52; i++) {
-        cout << deck1.draw() << " ";
+        cout << d.deck[i] << " ";
     }
     cout << endl;
 
     //Player stuff
-    int hand[3] = {1, 2, 3};
-    int open[3] = {4, 5, 6};
     int last_played = 0;
 
     Player p1(1);
-    cout << p1.Do_Turn(hand, open, last_played) << endl;
+    cout << p1.do_turn(d.p1_hand, d.p1_open, d.p2_open, last_played) << endl;
     
 
     return 0;
