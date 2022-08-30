@@ -25,7 +25,7 @@ struct Deck {
     //Functions
     Deck() {
         for(int i = 0; i < 52; i++) {
-            deck[i] = i % 13;
+            deck[i] = i % 13 + 1;
         }
     }
     
@@ -62,19 +62,34 @@ struct Deck {
     }
     bool legal_move(int card) {
         if (card > last_played) {return true;}
-        else if (card == 0 || card == 1 || card == 4 || card == 9) {return true;}
+        else if (card == 1 || card == 2 || card == 5 || card == 10) {return true;}
         else {return false;}
+    }
+
+    void lay_card(int card) {
+        switch (card) {
+            case 1:
+                last_played = 14;
+                break;
+            case 5:
+                break;
+            case 10:
+                last_played = 0;
+                break;
+            default:
+                last_played = card;
+        }
     }
 
     void play(int player, int card_number) {
         if (player == 1) {
             if (legal_move(p1_hand[card_number])) {
-                last_played = p1_hand[card_number];
+                lay_card(p1_hand[card_number]);
                 p1_hand[card_number] = draw();
             }
         } else if (player == 2) {
             if (legal_move(p2_hand[card_number])) {
-                last_played = p2_hand[card_number];
+                lay_card(p2_hand[card_number]);
                 p2_hand[card_number] = draw();
             }
         } else {
