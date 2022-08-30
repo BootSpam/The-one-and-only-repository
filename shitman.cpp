@@ -7,9 +7,10 @@ using namespace std;
 
 struct Deck {
 
-    //Draw pile
+    //General
     int deck[52];
     int index;
+    int last_played;
 
     //Player one
     int p1_hidden[3];
@@ -21,7 +22,7 @@ struct Deck {
     int p2_open[3];
     int p2_hand[3];
     
-    //Elementary functions
+    //Functions
     Deck() {
         for(int i = 0; i < 52; i++) {
             deck[i] = i % 13;
@@ -31,6 +32,7 @@ struct Deck {
     void blanda() {
         shuffle(begin(this->deck), end(this->deck), mt19937{random_device{}()});
         index = 0;
+        last_played = 2;    //Represents a 3 or nothing
     }
 
     int draw() {
@@ -59,14 +61,28 @@ struct Deck {
 
     }
 
+    void play(int player, int card_number) {
+        if (player == 1) {
+            last_played = p1_hand[card_number];
+            p1_hand[card_number] = 13;  //Means a new card shall be drawn into here
+        } else if (player == 2) {
+            last_played = p2_hand[card_number];
+            p2_hand[card_number] = 13;  //Means a new card shall be drawn into here
+        } else {
+            cout << "Invalid player" << endl;
+        }
+    }
+
 };
 
 int main() {
     
+    //Setup game
     Deck d;
     d.blanda();
     d.deal();
     
+    //Print deck
     cout << "Deck ";
     for(int i = 0; i < 52; i++) {
         cout << d.deck[i] << " ";
@@ -74,10 +90,13 @@ int main() {
     cout << endl;
 
     //Player stuff
-    int last_played = 0;
-
     Player p1(1);
-    cout << p1.do_turn(d.p1_hand, d.p1_open, d.p2_open, last_played) << endl;
+    Player p2(2);
+
+    d.play(1, p1.do_turn(d.p1_hand, d.p1_open, d.p2_open, d.last_played));
+    d.play(2, p2.do_turn(d.p2_hand, d.p2_open, d.p1_open, d.last_played));
+
+    //cout << p1.do_turn(d.p1_hand, d.p1_open, d.p2_open, b.last_played) << endl;
     
 
     return 0;
