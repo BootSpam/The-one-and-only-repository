@@ -64,10 +64,10 @@ struct Deck {
     void play(int player, int card_number) {
         if (player == 1) {
             last_played = p1_hand[card_number];
-            p1_hand[card_number] = 13;  //Means a new card shall be drawn into here
+            p1_hand[card_number] = draw();
         } else if (player == 2) {
             last_played = p2_hand[card_number];
-            p2_hand[card_number] = 13;  //Means a new card shall be drawn into here
+            p2_hand[card_number] = draw();
         } else {
             cout << "Invalid player" << endl;
         }
@@ -93,8 +93,10 @@ int main() {
     Player p1(1);
     Player p2(2);
 
-    d.play(1, p1.do_turn(d.p1_hand, d.p1_open, d.p2_open, d.last_played));
-    d.play(2, p2.do_turn(d.p2_hand, d.p2_open, d.p1_open, d.last_played));
+    while(true) {
+        d.play(1, p1.do_turn(d.p1_hand, d.p1_open, d.p2_open, d.last_played));
+        d.play(2, p2.do_turn(d.p2_hand, d.p2_open, d.p1_open, d.last_played));
+    }
 
     //cout << p1.do_turn(d.p1_hand, d.p1_open, d.p2_open, b.last_played) << endl;
     
