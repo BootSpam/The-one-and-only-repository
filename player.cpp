@@ -16,6 +16,6 @@ int Player::do_turn(int* hand, int* your_open, int* opponents_open, int last_pla
     cin >> this->card_to_play;
 
     //Return card 0-2 or no card 3
-    cout << "Return ";
+    //cout << "Return ";
     return card_to_play;
 }
