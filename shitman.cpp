@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <random>
 #include "player.h"
+#include <vector>
 
 using namespace std;
 
@@ -15,12 +16,12 @@ struct Deck {
     //Player one
     int p1_hidden[3];
     int p1_open[3];
-    int p1_hand[3];
+    vector<int> p1_hand = {0, 0, 0,};
 
     //Player two
     int p2_hidden[3];
     int p2_open[3];
-    int p2_hand[3];
+    vector<int> p2_hand = {0, 0, 0,};
     
     //Functions
     Deck() {
@@ -32,7 +33,7 @@ struct Deck {
     void blanda() {
         shuffle(begin(this->deck), end(this->deck), mt19937{random_device{}()});
         index = 0;
-        last_played = 2;    //Represents a 3 or nothing
+        last_played = 0;    //Represents no card
     }
 
     int draw() {
@@ -42,7 +43,7 @@ struct Deck {
         }
 
         index++;
-        return deck[index -1];
+        return deck[index - 1];
     }
 
     void deal() {
@@ -119,7 +120,9 @@ int main() {
 
     while(true) {
         d.play(1, p1.do_turn(d.p1_hand, d.p1_open, d.p2_open, d.last_played));
+        cout << d.index << endl;
         d.play(2, p2.do_turn(d.p2_hand, d.p2_open, d.p1_open, d.last_played));
+        cout << d.index << endl;
     }
 
     return 0;
