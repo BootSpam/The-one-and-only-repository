@@ -17,11 +17,13 @@ struct Deck {
     int p1_hidden[3];
     int p1_open[3];
     vector<int> p1_hand = {0, 0, 0,};
+    vector<int> p1_playable;
 
     //Player two
     int p2_hidden[3];
     int p2_open[3];
     vector<int> p2_hand = {0, 0, 0,};
+    vector<int> p2_playable;
     
     //Functions
     Deck() {
@@ -65,6 +67,37 @@ struct Deck {
         if (card > last_played) {return true;}
         else if (card == 1 || card == 2 || card == 5 || card == 10) {return true;}
         else {return false;}
+    }
+    void set_playable(int player) {
+        if (player == 1) {
+            p1_playable.clear();
+            for(int i = 0; i < p1_hand.size(); i++) {
+                if (legal_move(p1_hand[i])) {
+                    p1_playable.push_back(p1_hand[i]);
+                }
+            }
+        }
+        else if (player == 2) {
+            p2_playable.clear();
+            for(int i = 0; i < p2_hand.size(); i++) {
+                if (legal_move(p2_hand[i])) {
+                    p2_playable.push_back(p2_hand[i]);
+                }
+            }
+        }
+    }
+
+    int find_card_in_hand(int player, int card) {
+        if (player == 1) {
+            for (int i = 0; i < p1_hand.size(); i++) {
+                if (p1_hand[i] == card) {return i;}
+            }
+        } else if (player == 2) {
+            for (int i = 0; i < p2_hand.size(); i++) {
+                if (p2_hand[i] == card) {return i;}
+            }
+        }
+        return 0;  //Not supposed to happen
     }
 
     void lay_card(int card) {
@@ -119,10 +152,27 @@ int main() {
     Player p2(2);
 
     while(true) {
-        d.play(1, p1.do_turn(d.p1_hand, d.p1_open, d.p2_open, d.last_played));
-        cout << d.index << endl;
-        d.play(2, p2.do_turn(d.p2_hand, d.p2_open, d.p1_open, d.last_played));
-        cout << d.index << endl;
+        d.set_playable(1);
+        d.play(1, 
+            d.find_card_in_hand(1, 
+            d.p1_playable[
+            p1.do_turn(
+                d.p1_hand,
+                d.p1_playable, 
+                d.p1_open, 
+                d.p2_open, 
+                d.last_played)]));
+
+        d.set_playable(2);
+        d.play(2, 
+            d.find_card_in_hand(1, 
+            d.p1_playable[
+            p2.do_turn(
+                d.p2_hand,
+                d.p2_playable, 
+                d.p2_open, 
+                d.p1_open, 
+                d.last_played)]));
     }
 
     return 0;

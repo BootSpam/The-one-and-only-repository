@@ -3,23 +3,21 @@
 #include <vector>
 
 using namespace std;
-int Player::do_turn(vector<int>& hand, int* your_open, int* opponents_open, int last_played) {
+int Player::do_turn(vector<int>& real_hand, vector<int>& hand, int* your_open, int* opponents_open, int last_played) {
     
     //Display for human player
-    /*
-    cout << endl << "Player " << player_number << endl
-        << "Your hand " << hand[0] << " " << hand[1] << " " << hand[2] << endl
-        << "Your open cards  " << your_open[0] << " " << your_open[1] << " " << your_open[2] << endl
-        << "Opponents open cards  " << opponents_open[0] << " " << opponents_open[1] << " " << opponents_open[2]
-        << endl;
-    */
-    
     cout << endl << "Player " << player_number << endl
         << "Last played " << last_played << endl;
-    cout << "Your hand ";
     
+    cout << "Your hand ";
     for (int i = 0; i < hand.size(); i++) {
         cout << hand[i] << " ";
+    }
+    cout << endl;
+
+    cout << "Complete hand ";
+    for (int i = 0; i < real_hand.size(); i++) {
+        cout << real_hand[i] << " ";
     }
     cout << endl;
 
