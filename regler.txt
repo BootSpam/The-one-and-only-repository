@@ -1,0 +1,20 @@
+Regler skitgubbe, såsom det implementerats i nuvarande version:
+Varje spelare får tilldelas tre gömda och tre öppna kort, samt tre kort på hand.
+I början av spelet får man byta mellan korten på hand och de öppna korten. Om dubletter finns får de räknas som ett kort öppet kort.
+Närhelst man har färre än tre kort på hand skall man dra ett kort från den blandade kortleken.
+Två spelare turas om att lägga ett kort. (Support finns ännu inte för fler spelare)
+Den spelare som har hjärter tre på hand börjar, om ingen har hjärter tre börjar den med lägst kort på hand.
+När det är en spelares tur får denne lägga valfritt kort från handen, såvida detta inte är lägre än det kort som redan ligger.
+Om inget kort ligger får vilket kort som helst läggas.
+Korten Ace, Två, Fem och Tio får alltid läggas (Av den vars tur det är).
+Ace räknas som högsta kort.
+Den som lägger en Tvåa får sedan lägga ytterligare ett kort.
+Femma räknas som det kort som ligger under.
+Tio rensar högen av lagda kort, inklusive Tian.
+Den som lägger en Tia får sedan lägga ytterligare ett kort.
+När den blandade leken tagit slut behöver spelare inte längre dra därifrån.
+Den som inte längre har några kort på hand och inte kan dra, spelar från sina öppna kort istället för handen.
+Den som inte heller har några öppna kort spelar från sina gömda kort (ingen spelare känner till de dolda korten).
+Om en spelare inte kan lägga ett kort skall denne ta upp alla lagda kort, exklusive de som rensats av en Tia, på hand.
+Den spelare som först har tom hand, inga öppna kort och inga gömda kort, är ute ur spelet.
+Den spelare som är sist kvar blir skitgubbe.
