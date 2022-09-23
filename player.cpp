@@ -28,7 +28,9 @@ int Player::do_turn(vector<int>& real_hand, vector<int>& hand, int* your_open, i
     //Player input
     cout << "Play a card [0-2/3] or quit [4] ";
     cin >> this->card_to_play;
+    card_to_play = card_to_play % hand.size();
 
+    /*
 switch (card_to_play) {
 	case 0:
 		return card_to_play;
@@ -49,5 +51,6 @@ switch (card_to_play) {
 		cout << "Nice try" << endl;
 		cout << "Play a card [0-2/3] or quit [4] ";
 		cin >> this->card_to_play;
-	}
+	} */
+    return card_to_play;
 }
