@@ -1,8 +1,9 @@
 #include <iostream>
-#include <algorithm>
-#include <random>
-#include "player.h"
 #include <vector>
+#include <algorithm>    //For shuffling deck
+#include <random>
+
+#include "player.h"
 
 using namespace std;
 
