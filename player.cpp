@@ -31,7 +31,7 @@ int Player::do_turn(vector<int>& real_hand, vector<int>& hand, int* your_open, i
 
     //Adjust for bad input
     if (hand.size() == 0) {
-        cout << "Error: no playable cards" << endl;
+        cout << "Error: No playable cards" << endl;
         return 0;
     } else {
         card_to_play = card_to_play % hand.size();

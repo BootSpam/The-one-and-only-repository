@@ -41,7 +41,7 @@ struct Deck {
     int draw() {
         if (index > 51) {
             blanda();
-            cout << "Reshuffled" << endl; //Not supposed to happen
+            cout << "Error: Reshuffled" << endl; //Not supposed to happen
         }
 
         index++;
@@ -97,6 +97,7 @@ struct Deck {
                 if (p2_hand[i] == card) {return i;}
             }
         }
+        cout << "Error: Invalid player" << endl;
         return 0;  //Not supposed to happen
     }
 
