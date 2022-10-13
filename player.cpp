@@ -35,6 +35,7 @@ int Player::do_turn(vector<int>& real_hand, vector<int>& hand, int* your_open, i
         return 0;
     } else {
         card_to_play = card_to_play % hand.size();
+        cout << "Debug: card_to_play = " << card_to_play << endl;
     }
 
     return card_to_play;

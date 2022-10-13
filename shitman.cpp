@@ -7,6 +7,7 @@
 
 using namespace std;
 
+//TODO fix p2 tries to find last played instead of correct card
 struct Deck {
 
     //General
@@ -89,20 +90,28 @@ struct Deck {
     }
 
     int find_card_in_hand(int player, int card) {
+        cout << "Debug: card to find = " << card << endl;
         if (player == 1) {
             for (int i = 0; i < p1_hand.size(); i++) {
-                if (p1_hand[i] == card) {return i;}
+                if (p1_hand[i] == card) {
+                    cout << "Debug: card index = " << i << endl;
+                    return i;
+                }
             }
         } else if (player == 2) {
             for (int i = 0; i < p2_hand.size(); i++) {
-                if (p2_hand[i] == card) {return i;}
+                if (p2_hand[i] == card) {
+                    cout << "Debug: card index = " << i << endl;
+                    return i;
+                }
             }
         }
-        cout << "Error: Invalid player" << endl;
+        cout << "Error: Invalid player or card" << endl;
         return 0;  //Not supposed to happen
     }
 
     void lay_card(int card) {
+        cout << "Debug: card layed = " << card << endl;
         switch (card) {
             case 1:
                 last_played = 14;
@@ -110,7 +119,7 @@ struct Deck {
             case 5:
                 break;
             case 10:
-                last_played = 0;
+                last_played = 10;
                 break;
             default:
                 last_played = card;
@@ -167,7 +176,7 @@ int main() {
 
         d.set_playable(2);
         d.play(2, 
-            d.find_card_in_hand(1, 
+            d.find_card_in_hand(2, 
             d.p1_playable[
             p2.do_turn(
                 d.p2_hand,
