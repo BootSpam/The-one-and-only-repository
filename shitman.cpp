@@ -7,7 +7,10 @@
 
 using namespace std;
 
-//TODO fix p2 tries to find last played instead of correct card
+//Add 2 functionality
+//Add played cards-hög
+//Add slänghög functionality
+//Add ta upp kort
 struct Deck {
 
     //General
@@ -66,7 +69,7 @@ struct Deck {
 
     }
     bool legal_move(int card) {
-        if (card > last_played) {return true;}
+        if (card >= last_played) {return true;}
         else if (card == 1 || card == 2 || card == 5 || card == 10) {return true;}
         else {return false;}
     }
@@ -119,7 +122,7 @@ struct Deck {
             case 5:
                 break;
             case 10:
-                last_played = 10;
+                last_played = 0;
                 break;
             default:
                 last_played = card;
@@ -164,6 +167,7 @@ int main() {
 
     while(true) {
         d.set_playable(1);
+
         d.play(1, 
             d.find_card_in_hand(1, 
             d.p1_playable[
@@ -174,10 +178,12 @@ int main() {
                 d.p2_open, 
                 d.last_played)]));
 
+
         d.set_playable(2);
+
         d.play(2, 
             d.find_card_in_hand(2, 
-            d.p1_playable[
+            d.p2_playable[
             p2.do_turn(
                 d.p2_hand,
                 d.p2_playable, 
