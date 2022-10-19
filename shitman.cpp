@@ -7,7 +7,6 @@
 
 using namespace std;
 
-//Add 2 functionality
 //Add played cards-hög
 //Add slänghög functionality
 //Add ta upp kort
@@ -17,6 +16,7 @@ struct Deck {
     int deck[52];
     int index;
     int last_played;
+    int player_turn;
 
     //Player one
     int p1_hidden[3];
@@ -35,6 +35,7 @@ struct Deck {
         for(int i = 0; i < 52; i++) {
             deck[i] = i % 13 + 1;
         }
+        player_turn = 1;
     }
     
     void blanda() {
@@ -127,6 +128,17 @@ struct Deck {
             default:
                 last_played = card;
         }
+
+        //Switch turn
+        if (card != 2 && card != 10) {
+            switch (player_turn) {
+                case 1:
+                    player_turn = 2;
+                    break;
+                case 2:
+                    player_turn = 1;
+            }
+        }
     }
 
     void play(int player, int card_number) {
@@ -166,30 +178,31 @@ int main() {
     Player p2(2);
 
     while(true) {
-        d.set_playable(1);
-
-        d.play(1, 
-            d.find_card_in_hand(1, 
-            d.p1_playable[
-            p1.do_turn(
-                d.p1_hand,
-                d.p1_playable, 
-                d.p1_open, 
-                d.p2_open, 
-                d.last_played)]));
-
-
-        d.set_playable(2);
-
-        d.play(2, 
-            d.find_card_in_hand(2, 
-            d.p2_playable[
-            p2.do_turn(
-                d.p2_hand,
-                d.p2_playable, 
-                d.p2_open, 
-                d.p1_open, 
-                d.last_played)]));
+        if (d.player_turn == 1) {
+            d.set_playable(1);
+            d.play(1, 
+                d.find_card_in_hand(1, 
+                d.p1_playable[
+                p1.do_turn(
+                    d.p1_hand,
+                    d.p1_playable, 
+                    d.p1_open, 
+                    d.p2_open, 
+                    d.last_played)]));
+        } else if (d.player_turn == 2) {
+            d.set_playable(2);
+            d.play(2, 
+                d.find_card_in_hand(2, 
+                d.p2_playable[
+                p2.do_turn(
+                    d.p2_hand,
+                    d.p2_playable, 
+                    d.p2_open, 
+                    d.p1_open, 
+                    d.last_played)]));
+        } else {
+            cout << "Error: player_turn = " << d.player_turn << endl;
+        }
     }
 
     return 0;
