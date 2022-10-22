@@ -17,15 +17,15 @@ struct Deck {
     vector<int> played_cards;
 
     //Player one
-    int p1_hidden[3];
-    int p1_open[3];
     vector<int> p1_hand = {0, 0, 0,};
+    vector<int> p1_open = {0, 0, 0,};
+    vector<int> p1_hidden = {0, 0, 0,};
     vector<int> p1_playable;
 
     //Player two
-    int p2_hidden[3];
-    int p2_open[3];
     vector<int> p2_hand = {0, 0, 0,};
+    vector<int> p2_open = {0, 0, 0,};
+    vector<int> p2_hidden = {0, 0, 0,};
     vector<int> p2_playable;
     
     //Functions
