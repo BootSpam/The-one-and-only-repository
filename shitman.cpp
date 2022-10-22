@@ -17,6 +17,7 @@ struct Deck {
     int index;
     int last_played;
     int player_turn;
+    vector<int> played_cards;
 
     //Player one
     int p1_hidden[3];
@@ -129,6 +130,9 @@ struct Deck {
                 last_played = card;
         }
 
+        //Add card to played pile
+        played_cards.push_back(card);
+
         //Switch turn
         if (card != 2 && card != 10) {
             switch (player_turn) {
@@ -145,15 +149,62 @@ struct Deck {
         if (player == 1) {
             if (legal_move(p1_hand[card_number])) {
                 lay_card(p1_hand[card_number]);
-                p1_hand[card_number] = draw();
+                
+                if (p1_hand.size() < 3) {
+                    p1_hand.erase(p1_hand.begin() + card_number);
+                } else {
+                    p1_hand[card_number] = draw();
+                }
             }
         } else if (player == 2) {
             if (legal_move(p2_hand[card_number])) {
                 lay_card(p2_hand[card_number]);
-                p2_hand[card_number] = draw();
+
+                if (p2_hand.size() < 3) {
+                    p2_hand.erase(p2_hand.begin() + card_number);
+                } else {
+                    p2_hand[card_number] = draw();
+                }
             }
         } else {
             cout << "Invalid player" << endl;
+        }
+    }
+
+    bool can_play(int player) {
+        if (player == 1 && p1_playable.size() == 0) {
+            cout << "Debug: Can not play" << endl;
+            return false;
+        } else if (player == 2 && p2_playable.size() == 0) {
+            cout << "Debug: Can not play" << endl;
+            return false;
+        } else {
+            cout << "Debug: Can play" << endl;
+            return true;
+        }
+    }
+    
+    void pick_up_pile(int player) {
+        cout << "Debug: Picking up pile" << endl;
+        if (player == 1) {
+            for (int i = 0; i < played_cards.size(); i++) {
+                p1_hand.push_back(played_cards[i]);
+            }
+        } else if (player == 2) {
+            for (int i = 0; i < played_cards.size(); i++) {
+                p2_hand.push_back(played_cards[i]);
+            }
+        }
+        played_cards.clear();
+        last_played = 0;
+
+        //Switch turn
+        switch (player_turn) {
+            case 1:
+                player_turn = 2;
+                break;
+            case 2:
+                player_turn = 1;
         }
     }
 
@@ -180,26 +231,34 @@ int main() {
     while(true) {
         if (d.player_turn == 1) {
             d.set_playable(1);
-            d.play(1, 
-                d.find_card_in_hand(1, 
-                d.p1_playable[
-                p1.do_turn(
-                    d.p1_hand,
-                    d.p1_playable, 
-                    d.p1_open, 
-                    d.p2_open, 
-                    d.last_played)]));
+            if (d.can_play(1)) {
+                d.play(1, 
+                    d.find_card_in_hand(1, 
+                    d.p1_playable[
+                    p1.do_turn(
+                        d.p1_hand,
+                        d.p1_playable, 
+                        d.p1_open, 
+                        d.p2_open, 
+                        d.last_played)]));
+            } else {
+                d.pick_up_pile(1);
+            }
         } else if (d.player_turn == 2) {
             d.set_playable(2);
-            d.play(2, 
-                d.find_card_in_hand(2, 
-                d.p2_playable[
-                p2.do_turn(
-                    d.p2_hand,
-                    d.p2_playable, 
-                    d.p2_open, 
-                    d.p1_open, 
-                    d.last_played)]));
+            if (d.can_play(2)) {
+                d.play(2, 
+                    d.find_card_in_hand(2, 
+                    d.p2_playable[
+                    p2.do_turn(
+                        d.p2_hand,
+                        d.p2_playable, 
+                        d.p2_open, 
+                        d.p1_open, 
+                        d.last_played)]));
+            } else {
+                d.pick_up_pile(2);
+            }
         } else {
             cout << "Error: player_turn = " << d.player_turn << endl;
         }
