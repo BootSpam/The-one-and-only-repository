@@ -7,9 +7,6 @@
 
 using namespace std;
 
-//Add played cards-hög
-//Add slänghög functionality
-//Add ta upp kort
 struct Deck {
 
     //General
