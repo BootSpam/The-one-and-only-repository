@@ -8,8 +8,9 @@ struct Player {
     int do_turn(
         vector<int>& real_hand, 
         vector<int>& hand, 
-        vector<int>& your_open, 
+        vector<int>& played_cards,
+	vector<int>& your_open, 
         vector<int>& opponents_open, 
-        int last_played
+	int last_played
         );
 };

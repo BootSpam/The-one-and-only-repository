@@ -249,7 +249,8 @@ int main() {
                     p1.do_turn(
                         d.p1_hand,
                         d.p1_playable, 
-                        d.p1_open, 
+                        d.played_cards,
+			d.p1_open, 
                         d.p2_open, 
                         d.last_played)]));
             } else {
@@ -269,7 +270,8 @@ int main() {
                     p2.do_turn(
                         d.p2_hand,
                         d.p2_playable, 
-                        d.p2_open, 
+                        d.played_cards,
+			d.p2_open, 
                         d.p1_open, 
                         d.last_played)]));
             } else {
