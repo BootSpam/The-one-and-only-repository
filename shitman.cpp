@@ -15,6 +15,7 @@ struct Deck {
     int last_played;
     int player_turn;
     vector<int> played_cards;
+    bool is_empty;
 
     //Player one
     vector<int> p1_hand = {0, 0, 0,};
@@ -34,6 +35,7 @@ struct Deck {
             deck[i] = i % 13 + 1;
         }
         player_turn = 1;
+        is_empty = false;
     }
     
     void blanda() {
@@ -43,11 +45,16 @@ struct Deck {
     }
 
     int draw() {
-        if (index > 51) {
+        if (index >= 51) {
+            is_empty = true;
+            cout << "Debug: index >= 51, deck is empty after this" << endl;
+            /*
             blanda();
             cout << "Error: Reshuffled" << endl; //Not supposed to happen
+            */
         }
 
+        cout << "Debug: drawing card index " << index << endl;
         index++;
         return deck[index - 1];
     }
@@ -122,6 +129,7 @@ struct Deck {
                 break;
             case 10:
                 last_played = 0;
+                played_cards.clear();
                 break;
             default:
                 last_played = card;
@@ -129,6 +137,7 @@ struct Deck {
 
         //Add card to played pile
         played_cards.push_back(card);
+
 
         //Switch turn
         if (card != 2 && card != 10) {
@@ -147,13 +156,13 @@ struct Deck {
             if (legal_move(p1_hand[card_number])) {
                 lay_card(p1_hand[card_number]);
                 
-                if (p1_hand.size() > 3) {
+                if (p1_hand.size() > 3 || is_empty) {
                     p1_hand.erase(p1_hand.begin() + card_number);
                 } else {
                     p1_hand[card_number] = draw();
                 }
             }
-        } else if (player == 2) {
+        } else if (player == 2 || is_empty) {
             if (legal_move(p2_hand[card_number])) {
                 lay_card(p2_hand[card_number]);
 
@@ -227,6 +236,11 @@ int main() {
 
     while(true) {
         if (d.player_turn == 1) {
+
+            if (d.is_empty && d.p1_hand.size() == 0){
+                cout << "P1 late game" << endl;
+            }
+
             d.set_playable(1);
             if (d.can_play(1)) {
                 d.play(1, 
@@ -242,6 +256,11 @@ int main() {
                 d.pick_up_pile(1);
             }
         } else if (d.player_turn == 2) {
+
+            if (d.is_empty && d.p2_hand.size() == 0){
+                cout << "P2 late game" << endl;
+            }
+
             d.set_playable(2);
             if (d.can_play(2)) {
                 d.play(2, 
