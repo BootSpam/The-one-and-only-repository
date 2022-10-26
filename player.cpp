@@ -7,9 +7,10 @@ using namespace std;
 int Player::do_turn(
         vector<int>& real_hand, 
         vector<int>& hand, 
-        vector<int>& your_open, 
-        vector<int>& opponents_open, 
-        int last_played
+        vector<int>& played_cards,
+	vector<int>& your_open, 
+        vector<int>& opponents_open,
+	int last_played
     ) {
     
     //Display for human player
@@ -25,6 +26,12 @@ int Player::do_turn(
     cout << "Real hand ";
     for (int i = 0; i < real_hand.size(); i++) {
         cout << real_hand[i] << " ";
+    }
+    cout << endl;
+    
+    cout << "Played cards ";
+    for (int i = 0; i < played_cards.size(); i++) {
+	cout << played_cards[i] << " ";
     }
     cout << endl;
 
