@@ -122,6 +122,7 @@ struct Deck {
                 break;
             case 10:
                 last_played = 0;
+                played_cards.clear();
                 break;
             default:
                 last_played = card;
