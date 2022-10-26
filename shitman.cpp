@@ -147,7 +147,7 @@ struct Deck {
             if (legal_move(p1_hand[card_number])) {
                 lay_card(p1_hand[card_number]);
                 
-                if (p1_hand.size() < 3) {
+                if (p1_hand.size() > 3) {
                     p1_hand.erase(p1_hand.begin() + card_number);
                 } else {
                     p1_hand[card_number] = draw();
@@ -157,7 +157,7 @@ struct Deck {
             if (legal_move(p2_hand[card_number])) {
                 lay_card(p2_hand[card_number]);
 
-                if (p2_hand.size() < 3) {
+                if (p2_hand.size() > 3) {
                     p2_hand.erase(p2_hand.begin() + card_number);
                 } else {
                     p2_hand[card_number] = draw();
