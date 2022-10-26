@@ -8,7 +8,7 @@ int Player::do_turn(
         vector<int>& real_hand, 
         vector<int>& hand, 
         vector<int>& played_cards,
-	vector<int>& your_open, 
+	    vector<int>& your_open, 
         vector<int>& opponents_open,
 	int last_played
     ) {
@@ -31,7 +31,7 @@ int Player::do_turn(
     
     cout << "Played cards ";
     for (int i = 0; i < played_cards.size(); i++) {
-	cout << played_cards[i] << " ";
+	    cout << played_cards[i] << " ";
     }
     cout << endl;
 
