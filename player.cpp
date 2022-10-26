@@ -4,7 +4,13 @@
 #include <stdlib.h>
 
 using namespace std;
-int Player::do_turn(vector<int>& real_hand, vector<int>& hand, int* your_open, int* opponents_open, int last_played) {
+int Player::do_turn(
+        vector<int>& real_hand, 
+        vector<int>& hand, 
+        vector<int>& your_open, 
+        vector<int>& opponents_open, 
+        int last_played
+    ) {
     
     //Display for human player
     cout << endl << "Player " << player_number << endl
