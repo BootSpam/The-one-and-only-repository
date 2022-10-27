@@ -162,11 +162,11 @@ struct Deck {
                     p1_hand[card_number] = draw();
                 }
             }
-        } else if (player == 2 || is_empty) {
+        } else if (player == 2) {
             if (legal_move(p2_hand[card_number])) {
                 lay_card(p2_hand[card_number]);
 
-                if (p2_hand.size() > 3) {
+                if (p2_hand.size() > 3 || is_empty) {
                     p2_hand.erase(p2_hand.begin() + card_number);
                 } else {
                     p2_hand[card_number] = draw();
