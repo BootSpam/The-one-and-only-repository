@@ -22,12 +22,14 @@ struct Deck {
     vector<int> p1_open = {0, 0, 0,};
     vector<int> p1_hidden = {0, 0, 0,};
     vector<int> p1_playable;
+    bool p1_open_mode;
 
     //Player two
     vector<int> p2_hand = {0, 0, 0,};
     vector<int> p2_open = {0, 0, 0,};
     vector<int> p2_hidden = {0, 0, 0,};
     vector<int> p2_playable;
+    bool p2_open_mode;
     
     //Functions
     Deck() {
@@ -36,11 +38,12 @@ struct Deck {
         }
         player_turn = 1;
         is_empty = false;
+        p1_open_mode = p2_open_mode = false;
     }
     
     void blanda() {
         shuffle(begin(this->deck), end(this->deck), mt19937{random_device{}()});
-        index = 0;
+        index = 29;         //OBS Debug only, should be 0
         last_played = 0;    //Represents no card
     }
 
@@ -193,10 +196,24 @@ struct Deck {
     void pick_up_pile(int player) {
         cout << "Debug: Picking up pile" << endl;
         if (player == 1) {
+            if (p1_open_mode) {
+                p1_open.clear();
+                for (int i = 0; i < p1_hand.size(); i++) {
+                    p1_open.push_back(p1_hand[i]);
+                }
+                p1_open_mode = false;
+            }
             for (int i = 0; i < played_cards.size(); i++) {
                 p1_hand.push_back(played_cards[i]);
             }
         } else if (player == 2) {
+            if (p2_open_mode) {
+                p2_open.clear();
+                for (int i = 0; i < p2_hand.size(); i++) {
+                    p2_open.push_back(p1_hand[i]);
+                }
+                p2_open_mode = false;
+            }
             for (int i = 0; i < played_cards.size(); i++) {
                 p2_hand.push_back(played_cards[i]);
             }
@@ -237,8 +254,17 @@ int main() {
     while(true) {
         if (d.player_turn == 1) {
 
-            if (d.is_empty && d.p1_hand.size() == 0){
-                cout << "P1 late game" << endl;
+            if (d.p1_open_mode) {
+                d.p1_open.clear();
+                for (int i = 0; i < d.p1_hand.size(); i++) {
+                    d.p1_open.push_back(d.p1_hand[i]);
+                }
+            } else if (d.is_empty && d.p1_hand.size() == 0){
+                d.p1_open_mode = true;
+                cout << "Debug: P1_open_mode = true" << endl;
+                for (int i = 0; i < d.p1_open.size(); i++) {
+                    d.p1_hand.push_back(d.p1_open[i]);
+                }
             }
 
             d.set_playable(1);
@@ -258,8 +284,17 @@ int main() {
             }
         } else if (d.player_turn == 2) {
 
-            if (d.is_empty && d.p2_hand.size() == 0){
-                cout << "P2 late game" << endl;
+            if (d.p2_open_mode) {
+                d.p2_open.clear();
+                for (int i = 0; i < d.p2_hand.size(); i++) {
+                    d.p2_open.push_back(d.p1_hand[i]);
+                }
+            } else if (d.is_empty && d.p2_hand.size() == 0){
+                d.p2_open_mode = true;
+                cout << "Debug: P2_open_mode = true" << endl;
+                for (int i = 0; i < d.p2_open.size(); i++) {
+                    d.p2_hand.push_back(d.p2_open[i]);
+                }
             }
 
             d.set_playable(2);
