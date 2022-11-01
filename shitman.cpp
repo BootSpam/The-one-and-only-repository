@@ -128,30 +128,81 @@ struct Deck {
             }
         }
         cout << "Error: Invalid player or card" << endl;
+        cout << "Player: " << player << endl;
+        cout << "Card: " << card << endl;
+        
         return 0;  //Not supposed to happen
     }
 
-    void lay_card(int card) {
-        cout << "Debug: card layed = " << card << endl;
-        switch (card) {
-            case 1:
-                last_played = 14;
-                break;
-            case 5:
-                break;
-            case 10:
-                last_played = 0;
-                played_cards.clear();
-                break;
-            default:
-                last_played = card;
-        }
-
+    bool lay_card(int card) {
         //Add card to played pile
         played_cards.push_back(card);
 
+        cout << "Debug: card layed = " << card << endl;
+
+        // check for four in a row
+        std::vector<int>::reverse_iterator rit = played_cards.rbegin();
+        int check_value = *rit;
+        int i;
+        for (rit = played_cards.rbegin(), i = 0; rit!= played_cards.rend(), i < 4, check_value == *rit; ++rit, ++i) {
+            if (i == 3) {
+                last_played = 0;
+                played_cards.clear();
+                return true;
+            }
+        }
+        
+        switch (card) {
+            case 1:
+                last_played = 14;
+                return false;
+            case 2:
+                last_played = 2;
+                return true;
+            case 5:
+                return false;
+            case 10:
+                last_played = 0;
+                played_cards.clear();
+                return true;
+            default:
+                last_played = card;
+                return false;
+        }
+    }
+
+    void play(int player, Play play) {
+        int card_number;
+        bool play_again = false;
+        
+        if (player == 1) {
+            if (legal_move(play.card_value)) {
+                for (int i = 0; i < play.amount; i++) {
+                    card_number = find_card_in_hand(1, play.card_value);
+                    play_again = lay_card(play.card_value);
+                    p1_hand.erase(p1_hand.begin() + card_number);
+                }
+                while(p1_hand.size() < 3) {
+                    p1_hand.push_back(draw());
+                }
+            }
+        } else if (player == 2) {
+            if (legal_move(play.card_value)) {
+                for (int i = 0; i < play.amount; i++) {
+                    card_number = find_card_in_hand(2, play.card_value);
+                    play_again = lay_card(play.card_value);
+                    p2_hand.erase(p2_hand.begin() + card_number);
+                }
+                while(p2_hand.size() < 3) {
+                    p2_hand.push_back(draw());
+                }
+            }
+        } else {
+            cout << "Invalid player" << endl;
+        }
+
         //Switch turn
-        if (card != 2 && card != 10) {
+        if (!play_again) {
             switch (player_turn) {
                 case 1:
                     player_turn = 2;
@@ -159,35 +210,6 @@ struct Deck {
                 case 2:
                     player_turn = 1;
             }
-        }
-    }
-
-    void play(int player, Play play) {
-        int card_number;
-        if (player == 1) {
-            if (legal_move(play.amount)) {
-                card_number = find_card_in_hand(1, play.amount);
-                lay_card(play.amount);
-                
-                if (p1_hand.size() > 3) {
-                    p1_hand.erase(p1_hand.begin() + card_number);
-                } else {
-                    p1_hand[card_number] = draw();
-                }
-            }
-        } else if (player == 2) {
-            if (legal_move(play.amount)) {
-                card_number = find_card_in_hand(1, play.amount);
-                lay_card(play.amount);
-
-                if (p2_hand.size() > 3) {
-                    p2_hand.erase(p2_hand.begin() + card_number);
-                } else {
-                    p2_hand[card_number] = draw();
-                }
-            }
-        } else {
-            cout << "Invalid player" << endl;
         }
     }
 

@@ -78,5 +78,8 @@ Play Player::do_turn(
     play.card_value = playable_hand[card_to_play];
     play.amount = amount_to_play;
 
+    cout << "Debug: played card value = " << play.card_value << endl;
+    cout << "Debug: played amount = " << play.amount << endl;
+
     return play;
 }

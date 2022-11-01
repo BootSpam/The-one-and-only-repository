@@ -14,10 +14,10 @@ struct Player {
 
     Play do_turn(
         vector<int>& real_hand, 
-        vector<int>& hand, 
+        vector<int>& playable_hand, 
         vector<int>& played_cards,
 	vector<int>& your_open, 
-        vector<int>& opponents_open, 
+        vector<int>& opponents_open,
 	int last_played
         );
 };
