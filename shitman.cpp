@@ -21,14 +21,12 @@ struct Deck {
     vector<int> p1_open = {0, 0, 0,};
     vector<int> p1_hidden = {0, 0, 0,};
     vector<int> p1_playable;
-    vector<int> p1_duplicate;
 
     //Player two
     vector<int> p2_hand = {0, 0, 0,};
     vector<int> p2_open = {0, 0, 0,};
     vector<int> p2_hidden = {0, 0, 0,};
     vector<int> p2_playable;
-    vector<int> p2_duplicate;
     
     //Functions
     Deck() {
@@ -74,21 +72,6 @@ struct Deck {
         if (card >= last_played) {return true;}
         else if (card == 1 || card == 2 || card == 5 || card == 10) {return true;}
         else {return false;}
-    }
-
-    void set_duplicates(int player) {
-        if (player == 1) {
-            p1_duplicate.clear();
-            for(int i = 0; i < p1_duplicate.size(); i++){
-            
-            }
-        }
-        else if (player == 2) {
-            p2_duplicate.clear();
-            for(int i = 0; i < p2_duplicate.size(); i++) {
-
-            }
-        }
     }
 
     void set_playable(int player) {
