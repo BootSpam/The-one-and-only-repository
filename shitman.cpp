@@ -21,12 +21,14 @@ struct Deck {
     vector<int> p1_open = {0, 0, 0,};
     vector<int> p1_hidden = {0, 0, 0,};
     vector<int> p1_playable;
+    vector<int> p1_duplicate;
 
     //Player two
     vector<int> p2_hand = {0, 0, 0,};
     vector<int> p2_open = {0, 0, 0,};
     vector<int> p2_hidden = {0, 0, 0,};
     vector<int> p2_playable;
+    vector<int> p2_duplicate;
     
     //Functions
     Deck() {
@@ -67,11 +69,28 @@ struct Deck {
         p1_hand[2] = draw();    p2_hand[2] = draw();
 
     }
+    
     bool legal_move(int card) {
         if (card >= last_played) {return true;}
         else if (card == 1 || card == 2 || card == 5 || card == 10) {return true;}
         else {return false;}
     }
+
+    void set_duplicates(int player) {
+        if (player == 1) {
+            p1_duplicate.clear();
+            for(int i = 0; i < p1_duplicate.size(); i++){
+            
+            }
+        }
+        else if (player == 2) {
+            p2_duplicate.clear();
+            for(int i = 0; i < p2_duplicate.size(); i++) {
+
+            }
+        }
+    }
+
     void set_playable(int player) {
         if (player == 1) {
             p1_playable.clear();
@@ -143,10 +162,12 @@ struct Deck {
         }
     }
 
-    void play(int player, int card_number) {
+    void play(int player, Play play) {
+        int card_number;
         if (player == 1) {
-            if (legal_move(p1_hand[card_number])) {
-                lay_card(p1_hand[card_number]);
+            if (legal_move(play.amount)) {
+                card_number = find_card_in_hand(1, play.amount);
+                lay_card(play.amount);
                 
                 if (p1_hand.size() > 3) {
                     p1_hand.erase(p1_hand.begin() + card_number);
@@ -155,8 +176,9 @@ struct Deck {
                 }
             }
         } else if (player == 2) {
-            if (legal_move(p2_hand[card_number])) {
-                lay_card(p2_hand[card_number]);
+            if (legal_move(play.amount)) {
+                card_number = find_card_in_hand(1, play.amount);
+                lay_card(play.amount);
 
                 if (p2_hand.size() > 3) {
                     p2_hand.erase(p2_hand.begin() + card_number);
@@ -231,15 +253,13 @@ int main() {
             d.set_playable(1);
             if (d.can_play(1)) {
                 d.play(1, 
-                    d.find_card_in_hand(1, 
-                    d.p1_playable[
                     p1.do_turn(
                         d.p1_hand,
                         d.p1_playable, 
                         d.played_cards,
-		            	d.p1_open, 
+                        d.p1_open, 
                         d.p2_open, 
-                        d.last_played)]));
+                        d.last_played));
             } else {
                 d.pick_up_pile(1);
             }
@@ -247,15 +267,13 @@ int main() {
             d.set_playable(2);
             if (d.can_play(2)) {
                 d.play(2, 
-                    d.find_card_in_hand(2, 
-                    d.p2_playable[
                     p2.do_turn(
                         d.p2_hand,
                         d.p2_playable, 
                         d.played_cards,
-			            d.p2_open, 
+                        d.p2_open, 
                         d.p1_open, 
-                        d.last_played)]));
+                        d.last_played));
             } else {
                 d.pick_up_pile(2);
             }
