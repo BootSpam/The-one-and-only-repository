@@ -84,8 +84,10 @@ struct Deck {
         else {return false;}
     }
 
+    //Also sorts hand
     void set_playable(int player) {
         if (player == 1) {
+            sort(p1_hand.begin(), p1_hand.end());
             p1_playable.clear();
             for(int i = 0; i < p1_hand.size(); i++) {
                 if (legal_move(p1_hand[i])) {
@@ -94,6 +96,7 @@ struct Deck {
             }
         }
         else if (player == 2) {
+            sort(p2_hand.begin(), p2_hand.end());
             p2_playable.clear();
             for(int i = 0; i < p2_hand.size(); i++) {
                 if (legal_move(p2_hand[i])) {

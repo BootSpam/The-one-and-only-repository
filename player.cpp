@@ -44,13 +44,14 @@ Play Player::do_turn(
     cout << "Play a card [0-" << playable_hand.size()-1 << "] ";
     cin >> this->card_to_play;
 
+    //Declarations to deal with duplicates
     int duplicates_of_chosen_card = 0;
     int value_of_chosen_card = playable_hand[this->card_to_play];
 
     this->amount_to_play = 1;
 
     // Check for duplicates
-    for(int i=0; i < playable_hand.size(); i++){
+    for (int i=0; i < playable_hand.size(); i++){
         if (playable_hand[i] == value_of_chosen_card)
             duplicates_of_chosen_card++;
     }
@@ -61,7 +62,7 @@ Play Player::do_turn(
         cin >> this->amount_to_play;
     }
 
-    //Adjust for bad input
+    //Adjust for bad card number input
     if (playable_hand.size() == 0) {
         cout << "Error: No playable cards" << endl;
         return play;
@@ -70,10 +71,14 @@ Play Player::do_turn(
         cout << "Debug: card_to_play = " << card_to_play << endl;
     }
 
+    //Adjust for bad duplicate number input
     if (amount_to_play > duplicates_of_chosen_card) {
         amount_to_play = duplicates_of_chosen_card;
-        cout << "Debug: amount_to_play = " << amount_to_play << endl;
     }
+    if (amount_to_play < 1) {
+        amount_to_play = 1;
+    }
+    cout << "Debug: amount_to_play = " << amount_to_play << endl;
 
     play.card_value = playable_hand[card_to_play];
     play.amount = amount_to_play;
