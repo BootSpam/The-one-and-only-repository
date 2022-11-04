@@ -77,11 +77,13 @@ struct Deck {
         p1_hand[2] = draw();    p2_hand[2] = draw();
 
     }
+    
     bool legal_move(int card) {
         if (card >= last_played) {return true;}
         else if (card == 1 || card == 2 || card == 5 || card == 10) {return true;}
         else {return false;}
     }
+
     void set_playable(int player) {
         if (player == 1) {
             p1_playable.clear();
@@ -119,23 +121,46 @@ struct Deck {
             }
         }
         cout << "Error: Invalid player or card" << endl;
+        cout << "Player: " << player << endl;
+        cout << "Card: " << card << endl;
+        
         return 0;  //Not supposed to happen
     }
 
-    void lay_card(int card) {
+    bool lay_card(int card) {
+        //Add card to played pile
+        played_cards.push_back(card);
+
         cout << "Debug: card layed = " << card << endl;
+
+        // check for four in a row
+        std::vector<int>::reverse_iterator rit = played_cards.rbegin();
+        int check_value = *rit;
+        int i;
+        for (rit = played_cards.rbegin(), i = 0; rit!= played_cards.rend(), i < 4, check_value == *rit; ++rit, ++i) {
+            if (i == 3) {
+                last_played = 0;
+                played_cards.clear();
+                return true;
+            }
+        }
+        
         switch (card) {
             case 1:
                 last_played = 14;
-                break;
+                return false;
+            case 2:
+                last_played = 2;
+                return true;
             case 5:
-                break;
+                return false;
             case 10:
                 last_played = 0;
                 played_cards.clear();
-                break;
+                return true;
             default:
                 last_played = card;
+                return false;
         }
 
         //Add card to played pile
@@ -154,31 +179,45 @@ struct Deck {
         }
     }
 
-    void play(int player, int card_number) {
+    void play(int player, Play play) {
+        int card_number;
+        bool play_again = false;
+        
         if (player == 1) {
-            if (legal_move(p1_hand[card_number])) {
-                lay_card(p1_hand[card_number]);
-                
-                if (p1_hand.size() > 3 || is_empty) {
-                    cout << "Debug: No card drawn" << endl;
+            if (legal_move(play.card_value)) {
+                for (int i = 0; i < play.amount; i++) {
+                    card_number = find_card_in_hand(1, play.card_value);
+                    play_again = lay_card(play.card_value);
                     p1_hand.erase(p1_hand.begin() + card_number);
-                } else {
-                    p1_hand[card_number] = draw();
+                }
+                while(p1_hand.size() < 3 && !is_empty) {
+                    p1_hand.push_back(draw());
                 }
             }
         } else if (player == 2) {
-            if (legal_move(p2_hand[card_number])) {
-                lay_card(p2_hand[card_number]);
-
-                if (p2_hand.size() > 3 || is_empty) {
-                    cout << "Debug: No card drawn" << endl;
+            if (legal_move(play.card_value)) {
+                for (int i = 0; i < play.amount; i++) {
+                    card_number = find_card_in_hand(2, play.card_value);
+                    play_again = lay_card(play.card_value);
                     p2_hand.erase(p2_hand.begin() + card_number);
-                } else {
-                    p2_hand[card_number] = draw();
+                }
+                while(p2_hand.size() < 3 && !is_empty) {
+                    p2_hand.push_back(draw());
                 }
             }
         } else {
             cout << "Invalid player" << endl;
+        }
+
+        //Switch turn
+        if (!play_again) {
+            switch (player_turn) {
+                case 1:
+                    player_turn = 2;
+                    break;
+                case 2:
+                    player_turn = 1;
+            }
         }
     }
 
@@ -289,15 +328,13 @@ int main() {
             d.set_playable(1);
             if (d.can_play(1)) {
                 d.play(1, 
-                    d.find_card_in_hand(1, 
-                    d.p1_playable[
                     p1.do_turn(
                         d.p1_hand,
                         d.p1_playable, 
                         d.played_cards,
 			            d.p1_open, 
                         d.p2_open, 
-                        d.last_played)]));
+                        d.last_played));
             } else {
                 d.pick_up_pile(1);
             }
@@ -320,15 +357,13 @@ int main() {
             d.set_playable(2);
             if (d.can_play(2)) {
                 d.play(2, 
-                    d.find_card_in_hand(2, 
-                    d.p2_playable[
                     p2.do_turn(
                         d.p2_hand,
                         d.p2_playable, 
                         d.played_cards,
 			            d.p2_open, 
                         d.p1_open, 
-                        d.last_played)]));
+                        d.last_played));
             } else {
                 d.pick_up_pile(2);
             }
