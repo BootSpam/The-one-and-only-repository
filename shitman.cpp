@@ -306,6 +306,7 @@ int main() {
                 //Debug section
                 cout << "-----------------------------------------" << endl;
                 cout << "P1 open size = " << d.p1_open.size() << ", should be 0" << endl;
+                //End debug section
 
                 for (int i = 0; i < d.p1_hand.size(); i++) {
                     d.p1_open.push_back(d.p1_hand[i]);
@@ -316,6 +317,7 @@ int main() {
                     cout << "p1_open[" << i << "] = " << d.p1_open[i] << endl;
                 }
                 cout << "-----------------------------------------" << endl;
+                //End debug section
 
             } else if (d.is_empty && d.p1_hand.size() == 0){
                 d.p1_open_mode = true;
