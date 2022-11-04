@@ -160,6 +160,7 @@ struct Deck {
                 lay_card(p1_hand[card_number]);
                 
                 if (p1_hand.size() > 3 || is_empty) {
+                    cout << "Debug: No card drawn" << endl;
                     p1_hand.erase(p1_hand.begin() + card_number);
                 } else {
                     p1_hand[card_number] = draw();
@@ -170,6 +171,7 @@ struct Deck {
                 lay_card(p2_hand[card_number]);
 
                 if (p2_hand.size() > 3 || is_empty) {
+                    cout << "Debug: No card drawn" << endl;
                     p2_hand.erase(p2_hand.begin() + card_number);
                 } else {
                     p2_hand[card_number] = draw();
@@ -197,22 +199,26 @@ struct Deck {
         cout << "Debug: Picking up pile" << endl;
         if (player == 1) {
             if (p1_open_mode) {
+                cout << "Debug: saving current hand to open" << endl;
                 p1_open.clear();
                 for (int i = 0; i < p1_hand.size(); i++) {
                     p1_open.push_back(p1_hand[i]);
                 }
                 p1_open_mode = false;
+                cout << "Debug: p1_open_mode = false" << endl;
             }
             for (int i = 0; i < played_cards.size(); i++) {
                 p1_hand.push_back(played_cards[i]);
             }
         } else if (player == 2) {
             if (p2_open_mode) {
+                cout << "Debug: saving current hand to open" << endl;
                 p2_open.clear();
                 for (int i = 0; i < p2_hand.size(); i++) {
                     p2_open.push_back(p1_hand[i]);
                 }
                 p2_open_mode = false;
+                cout << "Debug: p2_open_mode = false" << endl;
             }
             for (int i = 0; i < played_cards.size(); i++) {
                 p2_hand.push_back(played_cards[i]);
@@ -255,10 +261,23 @@ int main() {
         if (d.player_turn == 1) {
 
             if (d.p1_open_mode) {
+                cout << "Debug: Updating p1_open" << endl;
                 d.p1_open.clear();
+                
+                //Debug section
+                cout << "-----------------------------------------" << endl;
+                cout << "P1 open size = " << d.p1_open.size() << ", should be 0" << endl;
+
                 for (int i = 0; i < d.p1_hand.size(); i++) {
                     d.p1_open.push_back(d.p1_hand[i]);
                 }
+
+                //Debug section
+                for (int i = 0; i < d.p1_open.size(); i++) {
+                    cout << "p1_open[" << i << "] = " << d.p1_open[i] << endl;
+                }
+                cout << "-----------------------------------------" << endl;
+
             } else if (d.is_empty && d.p1_hand.size() == 0){
                 d.p1_open_mode = true;
                 cout << "Debug: P1_open_mode = true" << endl;
@@ -285,9 +304,10 @@ int main() {
         } else if (d.player_turn == 2) {
 
             if (d.p2_open_mode) {
+                cout << "Debug: Updating p2_open" << endl;
                 d.p2_open.clear();
                 for (int i = 0; i < d.p2_hand.size(); i++) {
-                    d.p2_open.push_back(d.p1_hand[i]);
+                    d.p2_open.push_back(d.p2_hand[i]);
                 }
             } else if (d.is_empty && d.p2_hand.size() == 0){
                 d.p2_open_mode = true;
