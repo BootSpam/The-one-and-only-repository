@@ -1,3 +1,8 @@
+/*
+TODO
+    kept open card in hand after picking up pile.
+    clear hand first
+*/
 #include <iostream>
 #include <vector>
 #include <algorithm>    //For shuffling deck
@@ -43,7 +48,7 @@ struct Deck {
     
     void blanda() {
         shuffle(begin(this->deck), end(this->deck), mt19937{random_device{}()});
-        index = 29;         //OBS Debug only, should be 0
+        index = 0;
         last_played = 0;    //Represents no card
     }
 
@@ -51,13 +56,9 @@ struct Deck {
         if (index >= 51) {
             is_empty = true;
             cout << "Debug: index >= 51, deck is empty after this" << endl;
-            /*
-            blanda();
-            cout << "Error: Reshuffled" << endl; //Not supposed to happen
-            */
         }
 
-        cout << "Debug: drawing card index " << index << endl;
+        cout << "Debug: drawing a " << deck[index] << " index " << index << endl;
         index++;
         return deck[index - 1];
     }
@@ -76,6 +77,8 @@ struct Deck {
         p1_hand[1] = draw();    p2_hand[1] = draw();
         p1_hand[2] = draw();    p2_hand[2] = draw();
 
+        //TODO remove row below
+        index = 51;
     }
     
     bool legal_move(int card) {
@@ -165,21 +168,6 @@ struct Deck {
                 last_played = card;
                 return false;
         }
-
-        //Add card to played pile
-        played_cards.push_back(card);
-
-
-        //Switch turn
-        if (card != 2 && card != 10) {
-            switch (player_turn) {
-                case 1:
-                    player_turn = 2;
-                    break;
-                case 2:
-                    player_turn = 1;
-            }
-        }
     }
 
     void play(int player, Play play) {
@@ -257,7 +245,7 @@ struct Deck {
                 cout << "Debug: saving current hand to open" << endl;
                 p2_open.clear();
                 for (int i = 0; i < p2_hand.size(); i++) {
-                    p2_open.push_back(p1_hand[i]);
+                    p2_open.push_back(p2_hand[i]);
                 }
                 p2_open_mode = false;
                 cout << "Debug: p2_open_mode = false" << endl;
@@ -300,36 +288,33 @@ int main() {
     Player p2(2);
 
     while(true) {
+
+        //Update open cards
+        if (d.p1_open_mode) {
+            cout << "Debug: Updating p1_open" << endl;
+            d.p1_open.clear();
+            for (int i = 0; i < d.p1_hand.size(); i++) {
+                d.p1_open.push_back(d.p1_hand[i]);
+            }
+        }
+        if (d.p2_open_mode) {
+            cout << "Debug: Updating p2_open" << endl;
+            d.p2_open.clear();
+            for (int i = 0; i < d.p2_hand.size(); i++) {
+                d.p2_open.push_back(d.p2_hand[i]);
+            }
+        }
+
+        //Player turns
+        cout << endl << "Debug: Player " << d.player_turn << endl;
         if (d.player_turn == 1) {
-
-            if (d.p1_open_mode) {
-                cout << "Debug: Updating p1_open" << endl;
-                d.p1_open.clear();
-                
-                //Debug section
-                cout << "-----------------------------------------" << endl;
-                cout << "P1 open size = " << d.p1_open.size() << ", should be 0" << endl;
-                //End debug section
-
-                for (int i = 0; i < d.p1_hand.size(); i++) {
-                    d.p1_open.push_back(d.p1_hand[i]);
-                }
-
-                //Debug section
-                for (int i = 0; i < d.p1_open.size(); i++) {
-                    cout << "p1_open[" << i << "] = " << d.p1_open[i] << endl;
-                }
-                cout << "-----------------------------------------" << endl;
-                //End debug section
-
-            } else if (d.is_empty && d.p1_hand.size() == 0){
+            if (d.is_empty && d.p1_hand.size() == 0){
                 d.p1_open_mode = true;
                 cout << "Debug: P1_open_mode = true" << endl;
                 for (int i = 0; i < d.p1_open.size(); i++) {
                     d.p1_hand.push_back(d.p1_open[i]);
                 }
             }
-
             d.set_playable(1);
             if (d.can_play(1)) {
                 d.play(1, 
@@ -341,24 +326,45 @@ int main() {
                         d.p2_open, 
                         d.last_played));
             } else {
-                d.pick_up_pile(1);
+                if (d.p1_open_mode && d.p1_hand.size() == 0 && d.p1_open.size() == 0) {
+                    //Win, plwy or pick up
+                    if (d.p1_hidden.size() == 0) {  //Should be redundant
+                        cout << "P1 wins" << endl;
+                        return 0;
+                    } else if (
+                    d.legal_move(d.p1_hidden[d.p1_hidden.size()-1])
+                    && d.p1_hidden[d.p1_hidden.size()-1] != 1 
+                    && d.p1_hidden[d.p1_hidden.size()-1] != 2 
+                    && d.p1_hidden[d.p1_hidden.size()-1] != 5
+                    ) {
+                        cout << "Debug: Good hidden card picked" << endl;
+                        d.lay_card(d.p1_hidden[d.p1_hidden.size()-1]);
+                        d.p1_hidden.erase(d.p1_hidden.begin() + d.p1_hidden.size() - 1);
+                        
+                        //Switch turn
+                        if (d.p1_hidden[d.p1_hidden.size()-1] != 2 && d.p1_hidden[d.p1_hidden.size()-1] != 10) {
+                            d.player_turn = 2;
+                        }
+                    } else {
+                        cout << "Debug: Bad hidden card picked" << endl <<
+                        "Debug: You picked a" << d.p1_hidden[d.p1_hidden.size()-1] << endl;
+
+                        d.played_cards.push_back(d.p1_hidden[d.p1_hidden.size()-1]);
+                        d.p1_hidden.erase(d.p1_hidden.begin() + d.p1_hidden.size() - 1);
+                        d.pick_up_pile(1);
+                    }
+                } else {
+                    d.pick_up_pile(1);
+                }
             }
         } else if (d.player_turn == 2) {
-
-            if (d.p2_open_mode) {
-                cout << "Debug: Updating p2_open" << endl;
-                d.p2_open.clear();
-                for (int i = 0; i < d.p2_hand.size(); i++) {
-                    d.p2_open.push_back(d.p2_hand[i]);
-                }
-            } else if (d.is_empty && d.p2_hand.size() == 0){
+            if (d.is_empty && d.p2_hand.size() == 0){
                 d.p2_open_mode = true;
                 cout << "Debug: P2_open_mode = true" << endl;
                 for (int i = 0; i < d.p2_open.size(); i++) {
                     d.p2_hand.push_back(d.p2_open[i]);
                 }
             }
-
             d.set_playable(2);
             if (d.can_play(2)) {
                 d.play(2, 
@@ -370,10 +376,48 @@ int main() {
                         d.p1_open, 
                         d.last_played));
             } else {
-                d.pick_up_pile(2);
+                if (d.p2_open_mode && d.p2_hand.size() == 0 && d.p2_open.size() == 0) {
+                    //Win, plwy or pick up
+                    if (d.p2_hidden.size() == 0) {  //Should be redundant
+                        cout << "P2 wins" << endl;
+                        return 0;
+                    } else if (
+                    d.legal_move(d.p2_hidden[d.p2_hidden.size()-1])
+                    && d.p2_hidden[d.p2_hidden.size()-1] != 1 
+                    && d.p2_hidden[d.p2_hidden.size()-1] != 2 
+                    && d.p2_hidden[d.p2_hidden.size()-1] != 5 
+                    ) {
+                        cout << "Debug: Good hidden card picked" << endl;
+                        d.lay_card(d.p2_hidden[d.p2_hidden.size()-1]);
+                        d.p2_hidden.erase(d.p2_hidden.begin() + d.p2_hidden.size() - 1);
+
+                        //Switch turn
+                        if (d.p2_hidden[d.p2_hidden.size()-1] != 2 && d.p2_hidden[d.p2_hidden.size()-1] != 10) {
+                            d.player_turn = 1;
+                        }
+                    } else {
+                        cout << "Debug: Bad hidden card picked" << endl <<
+                        "Debug: You picked a" << d.p2_hidden[d.p2_hidden.size()-1] << endl;
+
+                        d.played_cards.push_back(d.p2_hidden[d.p2_hidden.size()-1]);
+                        d.p2_hidden.erase(d.p2_hidden.begin() + d.p2_hidden.size() - 1);
+                        d.pick_up_pile(2);
+                    }
+                } else {
+                    d.pick_up_pile(2);
+                }
             }
         } else {
             cout << "Error: player_turn = " << d.player_turn << endl;
+        }
+
+        //See if anyone has won
+        if (d.p1_hand.size() == 0 && d.p1_hidden.size() == 0 && d.p1_open.size() == 0) {
+            cout << "P1 wins!" << endl;
+            return 0;
+        } else if (d.p2_hand.size() == 0 && d.p2_hidden.size() == 0 && d.p2_open.size() == 0) {
+            cout << "P2 wins!" << endl;
+            return 0;
         }
     }
 

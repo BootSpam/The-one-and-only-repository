@@ -16,7 +16,7 @@ Play Player::do_turn(
     Play play;
 
     //Display for human player
-    cout << endl << "Player " << player_number << endl
+    cout << "Player " << player_number << endl
         << "Last played " << last_played << endl;
     
     cout << "Playable hand ";
@@ -37,8 +37,17 @@ Play Player::do_turn(
     }
     cout << endl;
 
-    cout << "Your open cards  " << your_open[0] << " " << your_open[1] << " " << your_open[2] << endl
-        << "Opponents open cards  " << opponents_open[0] << " " << opponents_open[1] << " " << opponents_open[2] << endl;
+    cout << "Your open cards "; 
+    for (int i = 0; i < your_open.size(); i++) {
+        cout << your_open[i] << " ";
+    }
+    cout << endl;
+
+    cout << "Opponents open cards ";
+    for (int i = 0; i < opponents_open.size(); i++) {
+        cout << opponents_open[i] << " ";
+    }
+    cout << endl;
 
     //Player input
     cout << "Play a card [0-" << playable_hand.size()-1 << "] ";
