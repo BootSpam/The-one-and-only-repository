@@ -23,16 +23,16 @@ struct Deck {
     bool is_empty;
 
     //Player one
-    vector<int> p1_hand = {0, 0, 0,};
-    vector<int> p1_open = {0, 0, 0,};
-    vector<int> p1_hidden = {0, 0, 0,};
+    vector<int> p1_hand = {0, 0, 0};
+    vector<int> p1_open = {0, 0, 0};
+    vector<int> p1_hidden = {0, 0, 0};
     vector<int> p1_playable;
     bool p1_open_mode;
 
     //Player two
-    vector<int> p2_hand = {0, 0, 0,};
-    vector<int> p2_open = {0, 0, 0,};
-    vector<int> p2_hidden = {0, 0, 0,};
+    vector<int> p2_hand = {0, 0, 0};
+    vector<int> p2_open = {0, 0, 0};
+    vector<int> p2_hidden = {0, 0, 0};
     vector<int> p2_playable;
     bool p2_open_mode;
     
