@@ -72,8 +72,6 @@ struct Deck {
         p1_hand[1] = draw();    p2_hand[1] = draw();
         p1_hand[2] = draw();    p2_hand[2] = draw();
 
-        //TODO remove row below
-        index = 51;
     }
     
     bool legal_move(int card) {
