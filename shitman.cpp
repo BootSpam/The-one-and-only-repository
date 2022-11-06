@@ -1,8 +1,3 @@
-/*
-TODO
-    kept open card in hand after picking up pile.
-    clear hand first
-*/
 #include <iostream>
 #include <vector>
 #include <algorithm>    //For shuffling deck
@@ -234,6 +229,7 @@ struct Deck {
                 for (int i = 0; i < p1_hand.size(); i++) {
                     p1_open.push_back(p1_hand[i]);
                 }
+                p1_hand.clear();    //Must clear hand to ensure no residue open cards
                 p1_open_mode = false;
                 cout << "Debug: p1_open_mode = false" << endl;
             }
@@ -327,7 +323,7 @@ int main() {
                         d.last_played));
             } else {
                 if (d.p1_open_mode && d.p1_hand.size() == 0 && d.p1_open.size() == 0) {
-                    //Win, plwy or pick up
+                    //Win, play or pick up
                     if (d.p1_hidden.size() == 0) {  //Should be redundant
                         cout << "P1 wins" << endl;
                         return 0;
@@ -347,7 +343,7 @@ int main() {
                         }
                     } else {
                         cout << "Debug: Bad hidden card picked" << endl <<
-                        "Debug: You picked a" << d.p1_hidden[d.p1_hidden.size()-1] << endl;
+                        "Debug: You picked a " << d.p1_hidden[d.p1_hidden.size()-1] << endl;
 
                         d.played_cards.push_back(d.p1_hidden[d.p1_hidden.size()-1]);
                         d.p1_hidden.erase(d.p1_hidden.begin() + d.p1_hidden.size() - 1);
@@ -377,7 +373,7 @@ int main() {
                         d.last_played));
             } else {
                 if (d.p2_open_mode && d.p2_hand.size() == 0 && d.p2_open.size() == 0) {
-                    //Win, plwy or pick up
+                    //Win, play or pick up
                     if (d.p2_hidden.size() == 0) {  //Should be redundant
                         cout << "P2 wins" << endl;
                         return 0;
