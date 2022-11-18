@@ -281,6 +281,9 @@ int main() {
     Player p1(1);
     Player p2(2);
 
+    //Add early game function. 
+    //Call it here.
+
     while(true) {
 
         //Update open cards
