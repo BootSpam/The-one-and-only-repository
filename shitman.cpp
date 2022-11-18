@@ -168,7 +168,20 @@ struct Deck {
         bool play_again = false;
         
         if (player == 1) {
-            if (legal_move(play.card_value)) {
+            if (
+                p1_hidden.size() == 0 
+                && play.amount == p1_hand.size()
+                ) {
+                    if (
+                    play.card_value == 14
+                    || play.card_value == 2
+                    || play.card_value == 5
+                    || play.card_value == 10
+                    )
+                    play.amount --;
+                }
+        }
+            else if (legal_move(play.card_value)) {
                 for (int i = 0; i < play.amount; i++) {
                     card_number = find_card_in_hand(1, play.card_value);
                     play_again = lay_card(play.card_value);
