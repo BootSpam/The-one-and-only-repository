@@ -281,9 +281,6 @@ int main() {
     Player p1(1);
     Player p2(2);
 
-    //Add early game function. 
-    //Call it here.
-
     while(true) {
 
         //Update open cards
@@ -417,6 +414,26 @@ int main() {
             return 0;
         }
 
+        vector<int> total_cards;
+        if (d.p1_hidden.size() == 0 && d.p2_hidden.size() == 0) {
+            total_cards.reserve( d.p1_hand.size() + d.p2_hand.size() + d.played_cards.size() );
+            total_cards.insert( total_cards.end(), d.p1_hand.begin(), d.p1_hand.end() );
+            total_cards.insert( total_cards.end(), d.p2_hand.begin(), d.p2_hand.end() );
+            total_cards.insert( total_cards.end(), d.played_cards.begin(), d.played_cards.end());
+            std::vector<int>::reverse_iterator rit = total_cards.rbegin();
+            int check_card_ace = 1;
+            int check_card_two = 2;
+            int check_card_five = 5;
+            int i;
+            for (rit = total_cards.rbegin(), i = 0; rit!= total_cards.rend(), 
+                i < 9, check_card_ace == *rit || check_card_two == *rit || check_card_five == *rit;
+                ++rit, ++i) {
+                if (i == total_cards.size()) {
+                    cout << "Infinite loop yay" << endl;
+                    return 0;
+                }
+            }
+        }
         //Check if infinite loop, if all hidden cards have been played
     }
 
