@@ -1,3 +1,28 @@
+/*
+TODO
+Specialkort
+-Early Game
+   -Byta öppna kort
+Värde på korten
+    Värdefunktion
+Main loop
+    Hantera turer
+    Dra kort efter tur
+    Passa info till do_turn funktion i player.cpp 
+        Anpassa info som går ut till player
+        Ta emot info från player
+    kolla 4 in a row
+    kolla om man måste ta upp
+    Hantera endgame
+        Byta mellan öppna och gömda kort
+        spela gömda kort automatiskt
+        Kolla vinst
+            Inte gå ut på ess eller specialkort
+       -Infinite loop failsafe
+Byta namn på en Player class
+*/
+
+
 #include <iostream>
 #include <algorithm>
 #include <cstdlib>
@@ -109,16 +134,16 @@ public:
     }
 
     bool checkLegalMove(int card, int lastPlayed) {
-        if (card >= lastPlayed) {
+        if (card >= lastPlayed) {                       //Gör till jämförelse av värde inte index
             return true;
-        } else if (card == 1 || card == 2 || card == 5 || card == 10) {
+        } else if (card == 1 || card == 2 || card == 5 || card == 10) {     //Använd värde inte index
             return true;
         } else {
             return false;
         }
     }
 
-    void setPlayable(int lastPlayed) {
+    void setPlayable(int lastPlayed) {      //Eventuellt: Gör till bool. Ta upp hög om false (dvs inga spelbara kort)
         this->playableCards.clear();
         sort(this->hand.begin(), this->hand.end());
         for (int i = 0; i < this->hand.size(); i++) {
