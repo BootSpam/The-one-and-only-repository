@@ -33,7 +33,7 @@ struct Deck {
     
     //Functions
     Deck() {
-        for(int i = 0; i < 52; i++) {
+        for(int i = 0; i < 26; i++) {
             deck[i] = i % 13 + 1;
         }
         player_turn = 1;
@@ -434,7 +434,6 @@ int main() {
                 }
             }
         }
-        //Check if infinite loop, if all hidden cards have been played
     }
 
     return 0;
