@@ -413,6 +413,8 @@ int main() {
             cout << "P2 wins!" << endl;
             return 0;
         }
+
+        //Check if infinite loop, if all hidden cards have been played
     }
 
     return 0;
