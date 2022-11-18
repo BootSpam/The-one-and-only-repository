@@ -19,7 +19,7 @@ Main loop
        -Infinite loop failsafe
 Byta namn på en Player class
 */
-
+// FATAL ERROR NEEDS A BUG FIX
 #include <algorithm>
 #include <cstdlib>
 #include <ctime>
@@ -139,7 +139,7 @@ public:
 
   bool initialized = false;
 
-  void init(int array[52], int index, int pIndex) {
+  void init(int array[52], int index, int pIndex, int lastPlayed) {
     if (this->initialized == true) {
       return;
       cout << "Debug : Player is already initialized" << endl;
@@ -246,14 +246,14 @@ int main() {
   // This part is for initializing the players
   Player players[4];
   for (int i = 0; i < playerCount; i++) {
-    players[i].init(deck.deck, deck.index, i);
+    players[i].init(deck.deck, deck.index, i, table.lastPlayed);
     deck.index = deck.index + 9;
   }
 
   for (int i = 0; i < playerCount; i++) {
     for (int j = 0; j < 3; j++) {
-      whoToPlay.push_back(players[i].hand[j]);
-      cout << endl << players[i].hand[j];
+      whoToPlay.push_back(players[i].playableCards[j]);
+      cout << endl << players[i].playableCards[j];
     }
   }
 
@@ -263,13 +263,15 @@ int main() {
   while (true) {
     if (isGameInitialized == false) {
       for (int i = 0; i < playerCount; i++) {
-        if (findCardIndex(players[i].hand, playingCard) == 100) {
-          continue; // Means card is not found in given index
+        if (findCardIndex(players[i].playableCards, playingCard) == 100) {
+          continue; // Means card is not found in given players hand
         } else {
           playingPlayer = i;
+          cout << endl << playingPlayer;
           break;
         }
       }
       break;
     }
   }
+}
