@@ -470,7 +470,7 @@ int main() {
             std::vector<int>::reverse_iterator rit = total_cards.rbegin();
             int i;
             for (rit = total_cards.rbegin(), i = 0; rit!= total_cards.rend(), i < 9, 1 == *rit || 2 == *rit || 5 == *rit; ++rit, ++i) {
-                if (i == total_cards.size()) {
+                if (i == total_cards.size() -1) {
                     cout << "Infinite loop yay" << endl;
                     return 0;
                 }
