@@ -317,7 +317,7 @@ int main() {
         //Player turns
         cout << endl << "Debug: Player " << d.player_turn << endl;
         if (d.player_turn == 1) {
-            if (d.is_empty && d.p1_hand.size() == 0){
+            if (d.is_empty && d.p1_hand.size() == 0) {
                 d.p1_open_mode = true;
                 cout << "Debug: P1_open_mode = true" << endl;
                 for (int i = 0; i < d.p1_open.size(); i++) {
@@ -342,33 +342,37 @@ int main() {
                         return 0;
                     }
                     else if (
-                    d.p1_hidden.size() > 1
-                    && d.legal_move(d.p1_hidden[d.p1_hidden.size()-1])
+                        d.p1_hidden.size() > 1
+                        && d.legal_move(d.p1_hidden[d.p1_hidden.size()-1])
                     ) {
                         cout << "Debug: Good hidden card picked" << endl;
-                        d.lay_card(d.p1_hidden[d.p1_hidden.size()-1]);
-                        d.p1_hidden.erase(d.p1_hidden.begin() + d.p1_hidden.size() - 1);
-                        
+
                         //Switch turn
                         if (d.p1_hidden[d.p1_hidden.size()-1] != 2 && d.p1_hidden[d.p1_hidden.size()-1] != 10) {
                             d.player_turn = 2;
                         }
+                        
+                        d.lay_card(d.p1_hidden[d.p1_hidden.size()-1]);
+                        d.p1_hidden.erase(d.p1_hidden.begin() + d.p1_hidden.size() - 1);
+                    
+                    }
                     else if (
-                    d.p1_hidden.size() == 1
-                    && d.legal_move(d.p1_hidden[d.p1_hidden.size()-1])
-                    && d.p1_hidden[d.p1_hidden.size()-1] != 1 
-                    && d.p1_hidden[d.p1_hidden.size()-1] != 2 
-                    && d.p1_hidden[d.p1_hidden.size()-1] != 5
-                    && d.p1_hidden[d.p1_hidden.size()-1] != 10
-                    )
+                        d.p1_hidden.size() == 1
+                        && d.legal_move(d.p1_hidden[d.p1_hidden.size()-1])
+                        && d.p1_hidden[d.p1_hidden.size()-1] != 1 
+                        && d.p1_hidden[d.p1_hidden.size()-1] != 2 
+                        && d.p1_hidden[d.p1_hidden.size()-1] != 5
+                        && d.p1_hidden[d.p1_hidden.size()-1] != 10
+                    ) {
                         cout << "Debug: Good hidden card picked" << endl;
-                        d.lay_card(d.p1_hidden[d.p1_hidden.size()-1]);
-                        d.p1_hidden.erase(d.p1_hidden.begin() + d.p1_hidden.size() - 1);
-                        
+
                         //Switch turn
                         if (d.p1_hidden[d.p1_hidden.size()-1] != 2 && d.p1_hidden[d.p1_hidden.size()-1] != 10) {
                             d.player_turn = 2;
                         }
+
+                        d.lay_card(d.p1_hidden[d.p1_hidden.size()-1]);
+                        d.p1_hidden.erase(d.p1_hidden.begin() + d.p1_hidden.size() - 1);
 
                     } else {
                         cout << "Debug: Bad hidden card picked" << endl <<
@@ -408,33 +412,36 @@ int main() {
                         return 0;
                     }
                     else if (
-                    d.p2_hidden.size() > 1
-                    && d.legal_move(d.p2_hidden[d.p2_hidden.size()-1])
+                        d.p2_hidden.size() > 1
+                        && d.legal_move(d.p2_hidden[d.p2_hidden.size()-1])
                     ) {
                         cout << "Debug: Good hidden card picked" << endl;
-                        d.lay_card(d.p2_hidden[d.p2_hidden.size()-1]);
-                        d.p2_hidden.erase(d.p2_hidden.begin() + d.p2_hidden.size() - 1);
-                        
+
                         //Switch turn
                         if (d.p2_hidden[d.p2_hidden.size()-1] != 2 && d.p2_hidden[d.p2_hidden.size()-1] != 10) {
                             d.player_turn = 1;
                         }
+
+                        d.lay_card(d.p2_hidden[d.p2_hidden.size()-1]);
+                        d.p2_hidden.erase(d.p2_hidden.begin() + d.p2_hidden.size() - 1);
+                    }
                     else if (
-                    d.p2_hidden.size() == 1
-                    && d.legal_move(d.p2_hidden[d.p2_hidden.size()-1])
-                    && d.p2_hidden[d.p2_hidden.size()-1] != 1 
-                    && d.p2_hidden[d.p2_hidden.size()-1] != 2 
-                    && d.p2_hidden[d.p2_hidden.size()-1] != 5
-                    && d.p2_hidden[d.p2_hidden.size()-1] != 10
-                    )
+                        d.p2_hidden.size() == 1
+                        && d.legal_move(d.p2_hidden[d.p2_hidden.size()-1])
+                        && d.p2_hidden[d.p2_hidden.size()-1] != 1 
+                        && d.p2_hidden[d.p2_hidden.size()-1] != 2 
+                        && d.p2_hidden[d.p2_hidden.size()-1] != 5
+                        && d.p2_hidden[d.p2_hidden.size()-1] != 10
+                    ) {
                         cout << "Debug: Good hidden card picked" << endl;
-                        d.lay_card(d.p2_hidden[d.p2_hidden.size()-1]);
-                        d.p2_hidden.erase(d.p2_hidden.begin() + d.p2_hidden.size() - 1);
-                        
+
                         //Switch turn
                         if (d.p2_hidden[d.p2_hidden.size()-1] != 2 && d.p2_hidden[d.p2_hidden.size()-1] != 10) {
                             d.player_turn = 1;
                         }
+
+                        d.lay_card(d.p2_hidden[d.p2_hidden.size()-1]);
+                        d.p2_hidden.erase(d.p2_hidden.begin() + d.p2_hidden.size() - 1);
 
                     } else {
                         cout << "Debug: Bad hidden card picked" << endl <<
