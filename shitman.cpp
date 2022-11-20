@@ -168,20 +168,14 @@ struct Deck {
         bool play_again = false;
         
         if (player == 1) {
-            if (
-                p1_hidden.size() == 0 
-                && play.amount == p1_hand.size()
-                ) {
-                    if (
-                    play.card_value == 14
-                    || play.card_value == 2
-                    || play.card_value == 5
-                    || play.card_value == 10
-                    )
+            if (p1_hidden.size() == 0 && play.amount == p1_hand.size() && 
+                (play.card_value == 14
+                || play.card_value == 2
+                || play.card_value == 5
+                || play.card_value == 10)) {
                     play.amount --;
-                }
-        }
-            else if (legal_move(play.card_value)) {
+            }
+            if (legal_move(play.card_value)) {
                 for (int i = 0; i < play.amount; i++) {
                     card_number = find_card_in_hand(1, play.card_value);
                     play_again = lay_card(play.card_value);
@@ -191,7 +185,15 @@ struct Deck {
                     p1_hand.push_back(draw());
                 }
             }
-        } else if (player == 2) {
+        } 
+        else if (player == 2) {
+            if (p2_hidden.size() == 0 && play.amount == p2_hand.size() && 
+                (play.card_value == 14
+                || play.card_value == 2
+                || play.card_value == 5
+                || play.card_value == 10)) {
+                    play.amount --;
+            }
             if (legal_move(play.card_value)) {
                 for (int i = 0; i < play.amount; i++) {
                     card_number = find_card_in_hand(2, play.card_value);
@@ -460,18 +462,15 @@ int main() {
         }
 
         vector<int> total_cards;
-        if (d.p1_hidden.size() == 0 && d.p2_hidden.size() == 0) {
-            total_cards.reserve( d.p1_hand.size() + d.p2_hand.size() + d.played_cards.size() );
-            total_cards.insert( total_cards.end(), d.p1_hand.begin(), d.p1_hand.end() );
-            total_cards.insert( total_cards.end(), d.p2_hand.begin(), d.p2_hand.end() );
-            total_cards.insert( total_cards.end(), d.played_cards.begin(), d.played_cards.end());
+        total_cards.reserve( d.p1_hand.size() + d.p2_hand.size() + d.played_cards.size() );
+        total_cards.insert( total_cards.end(), d.p1_hand.begin(), d.p1_hand.end() );
+        total_cards.insert( total_cards.end(), d.p2_hand.begin(), d.p2_hand.end() );
+        total_cards.insert( total_cards.end(), d.played_cards.begin(), d.played_cards.end());
+        if (d.p1_hidden.size() == 0 && d.p2_hidden.size() == 0 && total_cards.size() > 10) {
             std::vector<int>::reverse_iterator rit = total_cards.rbegin();
-            int check_card_ace = 1;
-            int check_card_two = 2;
-            int check_card_five = 5;
             int i;
             for (rit = total_cards.rbegin(), i = 0; rit!= total_cards.rend(), 
-                i < 9, check_card_ace == *rit || check_card_two == *rit || check_card_five == *rit;
+                i < 9, 1 == *rit || 2 == *rit || 5 == *rit;
                 ++rit, ++i) {
                 if (i == total_cards.size()) {
                     cout << "Infinite loop yay" << endl;
