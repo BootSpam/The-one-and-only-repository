@@ -169,7 +169,7 @@ struct Deck {
         
         if (player == 1) {
             if (p1_hidden.size() == 0 && play.amount == p1_hand.size() && 
-                (play.card_value == 1
+                (play.card_value == 14
                 || play.card_value == 2
                 || play.card_value == 5
                 || play.card_value == 10)) {
@@ -188,7 +188,7 @@ struct Deck {
         } 
         else if (player == 2) {
             if (p2_hidden.size() == 0 && play.amount == p2_hand.size() && 
-                (play.card_value == 1
+                (play.card_value == 14
                 || play.card_value == 2
                 || play.card_value == 5
                 || play.card_value == 10)) {
@@ -337,11 +337,7 @@ int main() {
             } else {
                 if (d.p1_open_mode && d.p1_hand.size() == 0 && d.p1_open.size() == 0) {
                     //Win, play or pick up
-                    if (d.p1_hidden.size() == 0) {  //Should be redundant
-                        cout << "P1 wins" << endl;
-                        return 0;
-                    }
-                    else if (
+                    if (
                         d.p1_hidden.size() > 1
                         && d.legal_move(d.p1_hidden[d.p1_hidden.size()-1])
                     ) {
@@ -407,11 +403,7 @@ int main() {
             } else {
                 if (d.p2_open_mode && d.p2_hand.size() == 0 && d.p2_open.size() == 0) {
                     //Win, play or pick up
-                    if (d.p2_hidden.size() == 0) {  //Should be redundant
-                        cout << "P1 wins" << endl;
-                        return 0;
-                    }
-                    else if (
+                    if (
                         d.p2_hidden.size() > 1
                         && d.legal_move(d.p2_hidden[d.p2_hidden.size()-1])
                     ) {
