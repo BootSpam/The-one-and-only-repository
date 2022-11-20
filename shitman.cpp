@@ -169,7 +169,7 @@ struct Deck {
         
         if (player == 1) {
             if (p1_hidden.size() == 0 && play.amount == p1_hand.size() && 
-                (play.card_value == 14
+                (play.card_value == 1
                 || play.card_value == 2
                 || play.card_value == 5
                 || play.card_value == 10)) {
@@ -188,7 +188,7 @@ struct Deck {
         } 
         else if (player == 2) {
             if (p2_hidden.size() == 0 && play.amount == p2_hand.size() && 
-                (play.card_value == 14
+                (play.card_value == 1
                 || play.card_value == 2
                 || play.card_value == 5
                 || play.card_value == 10)) {
@@ -461,16 +461,15 @@ int main() {
         }
 
         vector<int> total_cards;
-        total_cards.reserve( d.p1_hand.size() + d.p2_hand.size() + d.played_cards.size() );
+
         total_cards.insert( total_cards.end(), d.p1_hand.begin(), d.p1_hand.end() );
         total_cards.insert( total_cards.end(), d.p2_hand.begin(), d.p2_hand.end() );
         total_cards.insert( total_cards.end(), d.played_cards.begin(), d.played_cards.end());
-        if (d.p1_hidden.size() == 0 && d.p2_hidden.size() == 0 && total_cards.size() > 10) {
+
+        if (d.p1_hidden.size() == 0 && d.p2_hidden.size() == 0 && total_cards.size() < 10) {
             std::vector<int>::reverse_iterator rit = total_cards.rbegin();
             int i;
-            for (rit = total_cards.rbegin(), i = 0; rit!= total_cards.rend(), 
-                i < 9, 1 == *rit || 2 == *rit || 5 == *rit;
-                ++rit, ++i) {
+            for (rit = total_cards.rbegin(), i = 0; rit!= total_cards.rend(), i < 9, 1 == *rit || 2 == *rit || 5 == *rit; ++rit, ++i) {
                 if (i == total_cards.size()) {
                     cout << "Infinite loop yay" << endl;
                     return 0;
