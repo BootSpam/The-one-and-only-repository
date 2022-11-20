@@ -169,7 +169,7 @@ struct Deck {
         
         if (player == 1) {
             if (p1_hidden.size() == 0 && play.amount == p1_hand.size() && 
-                (play.card_value == 14
+                (play.card_value == 1
                 || play.card_value == 2
                 || play.card_value == 5
                 || play.card_value == 10)) {
@@ -188,7 +188,7 @@ struct Deck {
         } 
         else if (player == 2) {
             if (p2_hidden.size() == 0 && play.amount == p2_hand.size() && 
-                (play.card_value == 14
+                (play.card_value == 1
                 || play.card_value == 2
                 || play.card_value == 5
                 || play.card_value == 10)) {
@@ -351,7 +351,7 @@ int main() {
                         if (d.p1_hidden[d.p1_hidden.size()-1] != 2 && d.p1_hidden[d.p1_hidden.size()-1] != 10) {
                             d.player_turn = 2;
                         }
-                        
+
                         d.lay_card(d.p1_hidden[d.p1_hidden.size()-1]);
                         d.p1_hidden.erase(d.p1_hidden.begin() + d.p1_hidden.size() - 1);
                     
