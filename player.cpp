@@ -97,3 +97,19 @@ Play Player::do_turn(
 
     return play;
 }
+
+int Player::do_early_turn(vector<int>& all_cards) {
+    
+    cout << "Player " << player_number << endl
+    << "Chose an open card: ";
+    for (int i = 0; i < all_cards.size(); i++) {
+        cout << all_cards[i] << " ";
+    }
+    cout << endl;
+    
+    //Player input
+    cout << "Pick a card [0-" << all_cards.size()-1 << "] ";
+    cin >> this->card_to_make_open;
+
+    return card_to_make_open;
+}

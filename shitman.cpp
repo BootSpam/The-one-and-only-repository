@@ -34,7 +34,7 @@ struct Deck {
     //Functions
     Deck() {
         for(int i = 0; i < 52; i++) {
-            deck[i] = i % 1 + 1;
+            deck[i] = i % 13 + 1;
         }
         player_turn = 1;
         is_empty = false;
@@ -295,6 +295,52 @@ int main() {
     //Player stuff
     Player p1(1);
     Player p2(2);
+
+    //p1 set early_cards
+    vector<int> p1_early_cards = {};
+    for(int i = 0; i < 3; i++) {
+        p1_early_cards.push_back(d.p1_hand[i]);
+    }
+    for(int i = 0; i < 3; i++) {
+        p1_early_cards.push_back(d.p1_open[i]);
+    }
+
+    //p1 early game loop
+    int early_index;
+    int early_card;
+    cout << endl;
+    for(int i = 0; i < 3; i++) {
+        early_index = p1.do_early_turn(p1_early_cards);
+        early_card = p1_early_cards[early_index];
+        d.p1_open[i] = early_card;
+        p1_early_cards.erase(p1_early_cards.begin() + early_index);
+    }
+    //set hand
+    for(int i = 0; i < 3; i++) {
+        d.p1_hand[i] = p1_early_cards[i];
+    }
+    
+    //p2 set early_cards
+    vector<int> p2_early_cards = {};
+    for(int i = 0; i < 3; i++) {
+        p2_early_cards.push_back(d.p2_hand[i]);
+    }
+    for(int i = 0; i < 3; i++) {
+        p2_early_cards.push_back(d.p2_open[i]);
+    }
+
+    //p2 early game loop
+    cout << endl;
+    for(int i = 0; i < 3; i++) {
+        early_index = p2.do_early_turn(p2_early_cards);
+        early_card = p2_early_cards[early_index];
+        d.p2_open[i] = early_card;
+        p2_early_cards.erase(p2_early_cards.begin() + early_index);
+    }
+    //set hand
+    for(int i = 0; i < 3; i++) {
+        d.p2_hand[i] = p2_early_cards[i];
+    }
 
     while(true) {
 
