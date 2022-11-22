@@ -75,7 +75,9 @@ struct Deck {
     }
     
     bool legal_move(int card) {
-        if (card >= last_played) {return true;}
+        if (p1_hidden.size() == 0 && p1_hand.size() == 1 && card == 1 || card == 2 || card == 5 || card == 10){return false;}
+        else if (p2_hidden.size() == 0 && p2_hand.size() == 1 && card == 1 || card == 2 || card == 5 || card == 10){return false;}
+        else if (card >= last_played) {return true;}
         else if (card == 1 || card == 2 || card == 5 || card == 10) {return true;}
         else {return false;}
     }
@@ -186,12 +188,6 @@ struct Deck {
                     p1_hand.push_back(draw());
                 }
             }
-            if (play.amount == 0){
-                
-                cout << "Only one card, picking up pile" << endl;
-
-                pick_up_pile(1);
-            }
 
         } 
         else if (player == 2) {
@@ -212,12 +208,6 @@ struct Deck {
                 while(p2_hand.size() < 3 && !is_empty) {
                     p2_hand.push_back(draw());
                 }
-            }
-            if (play.amount == 0){
-
-                cout << "Only one card, picking up pile" << endl;
-
-                pick_up_pile(2);
             }
         } else {
             cout << "Invalid player" << endl;
