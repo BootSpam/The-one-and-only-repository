@@ -174,6 +174,12 @@ struct Deck {
                 || play.card_value == 5
                 || play.card_value == 10)) {
                     play.amount --;
+
+                    if (play.amount == 0){
+                        cout << "Only one card, picking up pile" << endl;
+
+                        pick_up_pile(1);
+                    }
             }
             if (legal_move(play.card_value)) {
                 for (int i = 0; i < play.amount; i++) {
@@ -193,6 +199,12 @@ struct Deck {
                 || play.card_value == 5
                 || play.card_value == 10)) {
                     play.amount --;
+
+                    if (play.amount == 0){
+                        cout << "Only one card, have to pick up pile" << endl;
+
+                        pick_up_pile(2);
+                    }
             }
             if (legal_move(play.card_value)) {
                 for (int i = 0; i < play.amount; i++) {
