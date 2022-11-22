@@ -179,6 +179,7 @@ struct Deck {
                         cout << "Only one card, picking up pile" << endl;
 
                         pick_up_pile(1);
+                        player_turn = 2;
                     }
             }
             if (legal_move(play.card_value)) {
@@ -204,6 +205,7 @@ struct Deck {
                         cout << "Only one card, have to pick up pile" << endl;
 
                         pick_up_pile(2);
+                        player_turn =1;
                     }
             }
             if (legal_move(play.card_value)) {
