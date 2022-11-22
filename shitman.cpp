@@ -34,7 +34,7 @@ struct Deck {
     //Functions
     Deck() {
         for(int i = 0; i < 52; i++) {
-            deck[i] = i % 13 + 1;
+            deck[i] = i % 1 + 1;
         }
         player_turn = 1;
         is_empty = false;
