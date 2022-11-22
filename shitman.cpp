@@ -175,12 +175,6 @@ struct Deck {
                 || play.card_value == 10)) {
                     play.amount --;
 
-                    if (play.amount == 0){
-                        cout << "Only one card, picking up pile" << endl;
-
-                        pick_up_pile(1);
-                        player_turn = 2;
-                    }
             }
             if (legal_move(play.card_value)) {
                 for (int i = 0; i < play.amount; i++) {
@@ -192,6 +186,13 @@ struct Deck {
                     p1_hand.push_back(draw());
                 }
             }
+            if (play.amount == 0){
+                
+                cout << "Only one card, picking up pile" << endl;
+
+                pick_up_pile(1);
+            }
+
         } 
         else if (player == 2) {
             if (p2_hidden.size() == 0 && play.amount == p2_hand.size() && 
@@ -201,12 +202,6 @@ struct Deck {
                 || play.card_value == 10)) {
                     play.amount --;
 
-                    if (play.amount == 0){
-                        cout << "Only one card, have to pick up pile" << endl;
-
-                        pick_up_pile(2);
-                        player_turn =1;
-                    }
             }
             if (legal_move(play.card_value)) {
                 for (int i = 0; i < play.amount; i++) {
@@ -217,6 +212,12 @@ struct Deck {
                 while(p2_hand.size() < 3 && !is_empty) {
                     p2_hand.push_back(draw());
                 }
+            }
+            if (play.amount == 0){
+
+                cout << "Only one card, picking up pile" << endl;
+
+                pick_up_pile(2);
             }
         } else {
             cout << "Invalid player" << endl;
