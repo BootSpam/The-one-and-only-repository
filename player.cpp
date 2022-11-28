@@ -2,6 +2,7 @@
 #include <iostream>
 #include <vector>
 #include <stdlib.h>
+#include <limits.h>     //New for AI
 
 using namespace std;
 Play Player::do_turn(
@@ -51,7 +52,20 @@ Play Player::do_turn(
 
     //Player input
     cout << "Play a card [0-" << playable_hand.size()-1 << "] ";
-    cin >> this->card_to_play;
+    //cin >> this->card_to_play;
+    
+    /*AI*/
+    /*------------------------------------------------------------*/
+    
+    //                  A  2  3  4  5  6  7   8   9  10   J   Q   K
+    int weights[13] = {-8, -9, 4, 3, -7, 1, 0, -1, -2, -10, -4, -5, -6};
+    int highest_yet = INT_MIN;
+
+    for (int i = 0; i < playable_hand.size(); i++) {
+        if (weights[playable_hand[i-1]] > highest_yet) {this->card_to_play = weights[i];}
+    }
+
+    /*------------------------------------------------------------*/
 
     //Declarations to deal with duplicates
     int duplicates_of_chosen_card = 0;
@@ -68,7 +82,14 @@ Play Player::do_turn(
     // Optionally play duplicates
     if (duplicates_of_chosen_card > 1) {
         cout << "How many? [1-" << duplicates_of_chosen_card << "] ";
-        cin >> this->amount_to_play;
+        //cin >> this->amount_to_play;
+
+        /*AI*/
+        /*------------------------------------------------------------*/
+
+        this->amount_to_play = 1;
+
+        /*------------------------------------------------------------*/
     }
 
     //Adjust for bad card number input
