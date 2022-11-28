@@ -75,8 +75,8 @@ struct Deck {
     }
     
     bool legal_move(int card) {
-        if (player_turn == 1 && p1_hidden.size() == 0 && p1_hand.size() == 1 && card == 1 || card == 2 || card == 5 || card == 10){return false;}
-        else if (player_turn == 2 && p2_hidden.size() == 0 && p2_hand.size() == 1 && card == 1 || card == 2 || card == 5 || card == 10){return false;}
+        if (player_turn == 1 && p1_hidden.size() == 0 && p1_hand.size() == 1 && (card == 1 || card == 2 || card == 5 || card == 10)){return false;}
+        else if (player_turn == 2 && p2_hidden.size() == 0 && p2_hand.size() == 1 && (card == 1 || card == 2 || card == 5 || card == 10)){return false;}
         else if (card >= last_played) {return true;}
         else if (card == 1 || card == 2 || card == 5 || card == 10) {return true;}
         else {return false;}
