@@ -512,6 +512,9 @@ int main() {
         } else if (d.p2_hand.size() == 0 && d.p2_hidden.size() == 0 && d.p2_open.size() == 0) {
             cout << "P2 wins!" << endl;
             return 0;
+        } else if (turn > 1000) {
+            cout << "Both loose" << endl;
+            return 0;
         }
 
         vector<int> total_cards;
