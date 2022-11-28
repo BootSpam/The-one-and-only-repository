@@ -289,6 +289,7 @@ int main() {
     Deck d;
     d.blanda();
     d.deal();
+    int turn = 0;
     
     //Print deck
     cout << "Deck ";
@@ -348,6 +349,8 @@ int main() {
     }
 
     while(true) {
+        turn++;
+        cout << "Debug: Turn = " << turn << endl;
 
         //Update open cards
         if (d.p1_open_mode) {
