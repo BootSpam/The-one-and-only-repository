@@ -14,6 +14,8 @@ Play Player::do_turn(
 	    int last_played
     ) {
     
+    cout << "Debug: do_turn succesfully called" << endl;
+    
     Play play;
 
     //Display for human player
@@ -51,19 +53,24 @@ Play Player::do_turn(
     cout << endl;
 
     //Player input
-    cout << "Play a card [0-" << playable_hand.size()-1 << "] ";
+    cout << "Play a card [0-" << playable_hand.size()-1 << "] " << endl;
     //cin >> this->card_to_play;
     
     /*AI*/
     /*------------------------------------------------------------*/
     
-    //                  A  2  3  4  5  6  7   8   9  10   J   Q   K
-    int weights[13] = {-8, -9, 4, 3, -7, 1, 0, -1, -2, -10, -4, -5, -6};
+    //                      A   2   3   4   5   6   7   8   9  10   J   Q   K
+    int weights[13] = {    -2, -1,  9,  8,  0,  7,  6,  5,  4, 10,  3,  2,  1};
     int highest_yet = INT_MIN;
 
     for (int i = 0; i < playable_hand.size(); i++) {
-        if (weights[playable_hand[i-1]] > highest_yet) {this->card_to_play = weights[i];}
+        cout << "AI: card #" << i << " is a " << playable_hand[i] << " and is weighted " << weights[playable_hand[i]-1] << endl;
+        if (weights[playable_hand[i]-1] > highest_yet) {
+            this->card_to_play = i;
+            highest_yet = weights[playable_hand[i]-1];
+        }
     }
+    cout << "AI: We play #" << this->card_to_play << endl;
 
     /*------------------------------------------------------------*/
 
@@ -130,7 +137,14 @@ int Player::do_early_turn(vector<int>& all_cards) {
     
     //Player input
     cout << "Pick a card [0-" << all_cards.size()-1 << "] ";
-    cin >> this->card_to_make_open;
+    //cin >> this->card_to_make_open;
+
+    /*AI*/
+    /*------------------------------------------------------------*/
+
+    this->card_to_make_open = 0;
+
+    /*------------------------------------------------------------*/
 
     return card_to_make_open;
 }
