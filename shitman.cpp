@@ -261,6 +261,7 @@ struct Deck {
                 for (int i = 0; i < p2_hand.size(); i++) {
                     p2_open.push_back(p2_hand[i]);
                 }
+		p2_hand.clear();
                 p2_open_mode = false;
                 cout << "Debug: p2_open_mode = false" << endl;
             }
