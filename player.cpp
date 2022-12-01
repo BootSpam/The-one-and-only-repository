@@ -60,7 +60,7 @@ Play Player::do_turn(
     /*------------------------------------------------------------*/
     
     //                      A   2   3   4   5   6   7   8   9  10   J   Q   K
-    int weights[13] = {    -2, -1,  9,  8,  0,  7,  6,  5,  4, 10,  3,  2,  1};
+    int weights[13] = {    -2, -1,  9,  8,  0,  7,  6,  5,  4, -3,  3,  2,  1};
     int highest_yet = INT_MIN;
 
     for (int i = 0; i < playable_hand.size(); i++) {
@@ -88,13 +88,17 @@ Play Player::do_turn(
 
     // Optionally play duplicates
     if (duplicates_of_chosen_card > 1) {
-        cout << "How many? [1-" << duplicates_of_chosen_card << "] ";
+        cout << "How many? [1-" << duplicates_of_chosen_card << "] " << endl;
         //cin >> this->amount_to_play;
 
         /*AI*/
         /*------------------------------------------------------------*/
+        if (value_of_chosen_card == (2 || 5 || 10)) {
+        this-> amount_to_play = 1;
+        }
 
-        this->amount_to_play = 1;
+        else
+        this-> amount_to_play = duplicates_of_chosen_card;
 
         /*------------------------------------------------------------*/
     }
@@ -136,13 +140,24 @@ int Player::do_early_turn(vector<int>& all_cards) {
     cout << endl;
     
     //Player input
-    cout << "Pick a card [0-" << all_cards.size()-1 << "] ";
+    cout << "Pick a card [0-" << all_cards.size()-1 << "] " << endl;
     //cin >> this->card_to_make_open;
 
     /*AI*/
     /*------------------------------------------------------------*/
 
-    this->card_to_make_open = 0;
+    //                      A   2   3   4   5   6   7   8   9  10   J   Q   K
+    int weights[13] = {    -2, -1,  9,  8,  0,  7,  6,  5,  4, -3,  3,  2,  1};
+    int lowest_yet = INT_MAX;
+
+    for (int i = 0; i < all_cards.size(); i++) {
+        cout << "AI: card #" << i << " is a " << all_cards[i] << " and is weighted " << weights[all_cards[i]-1] << endl;
+        if (weights[all_cards[i]-1] < lowest_yet) {
+            this->card_to_make_open = i;
+            lowest_yet = weights[all_cards[i]-1];
+        }
+    }
+    cout << "AI: We choose #" << this->card_to_make_open << endl;
 
     /*------------------------------------------------------------*/
 
