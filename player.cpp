@@ -58,7 +58,7 @@ Play Player::do_turn(
     
     /*AI*/
     /*------------------------------------------------------------*/
-    
+
     //                      A   2   3   4   5   6   7   8   9  10   J   Q   K
     int weights[13] = {    -2, -1,  9,  8,  0,  7,  6,  5,  4, -3,  3,  2,  1};
     int highest_yet = INT_MIN;
@@ -93,12 +93,21 @@ Play Player::do_turn(
 
         /*AI*/
         /*------------------------------------------------------------*/
-        if (value_of_chosen_card == (2 || 5 || 10)) {
-        this-> amount_to_play = 1;
+        //                           A  2  3  4  5  6  7  8  9  10 J  Q  K 
+        int duplicate_weights[13] = {4, 1, 4, 4, 1, 4, 4, 4, 4, 1, 4, 4, 4};
+
+        //Choosing the amount to play based on the array "duplicate_weights"
+        this->amount_to_play = duplicate_weights[value_of_chosen_card-1];
+
+        //Adjust for bad duplicate number input
+        if (amount_to_play > duplicates_of_chosen_card) {
+            amount_to_play = duplicates_of_chosen_card;
+        }
+        if (amount_to_play < 1) {
+            amount_to_play = 1;
         }
 
-        else
-        this-> amount_to_play = duplicates_of_chosen_card;
+        cout << "AI: We play " << this->amount_to_play << " of the " << value_of_chosen_card << " cards" << endl;
 
         /*------------------------------------------------------------*/
     }
@@ -112,13 +121,6 @@ Play Player::do_turn(
         cout << "Debug: card_to_play = " << card_to_play << endl;
     }
 
-    //Adjust for bad duplicate number input
-    if (amount_to_play > duplicates_of_chosen_card) {
-        amount_to_play = duplicates_of_chosen_card;
-    }
-    if (amount_to_play < 1) {
-        amount_to_play = 1;
-    }
     cout << "Debug: amount_to_play = " << amount_to_play << endl;
 
     play.card_value = playable_hand[card_to_play];
