@@ -546,9 +546,7 @@ int main() {
                 }
             }
 
-            if (/*At end of loop*/ true) {
-                break;
-            }
+            break;
 
         }
 
