@@ -17,9 +17,9 @@ struct Player {
         vector<int>& real_hand, 
         vector<int>& playable_hand, 
         vector<int>& played_cards,
-	vector<int>& your_open, 
+	    vector<int>& your_open, 
         vector<int>& opponents_open,
-	int last_played
+	    int last_played
         );
 
     int do_early_turn(vector<int>& all_cards);

@@ -16,6 +16,8 @@ struct Deck {
     int player_turn;
     vector<int> played_cards;
     bool is_empty;
+    int all_weights[10][13];
+    int all_winning_weights[10][13];
 
     //Player one
     vector<int> p1_hand = {0, 0, 0};
@@ -282,24 +284,36 @@ struct Deck {
         }
     }
 
+    void set_random_weights() {
+        srand(time(NULL));
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 13; j++) {
+                all_weights[i][j] = rand();
+                cout << all_weights[i][j] << " ";
+            }
+            cout << endl;
+        }
+    }
+
 };
 
 int game = 0;
 
 int main() {
 
+    //Declarations
+    Deck d;
+    Player p1(1);
+    Player p2(2);
+    int turn;
+    int early_index;
+    int early_card;
+
+    d.set_random_weights();
+        
     while (game < 100){
 
         cout << "current game count " << game << endl;
-        //Declarations
-
-        Deck d;
-        Player p1(1);
-        Player p2(2);
-        int turn;
-        int early_index;
-        int early_card;
-        
         //Game loop
         while (true) {
 
@@ -546,9 +560,7 @@ int main() {
                 }
             }
 
-            if (/*At end of loop*/ true) {
-                break;
-            }
+            break;
 
         }
 
