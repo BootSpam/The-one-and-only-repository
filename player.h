@@ -11,6 +11,12 @@ struct Player {
     int card_to_play; // index of card in hand to play
     int amount_to_play; // number of equal cards to play
     int card_to_make_open;
+
+    //AI
+    int early_weights[13];
+    int mid_weights[13];
+    int duplicate_weights[13];
+
     Player(int n) {this->player_number = n;}
 
     Play do_turn(
@@ -21,6 +27,7 @@ struct Player {
         vector<int>& opponents_open,
 	    int last_played
         );
-
+    
     int do_early_turn(vector<int>& all_cards);
+    void set_weights(int* earlies, int* mids, int* dupes);
 };

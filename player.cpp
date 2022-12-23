@@ -60,14 +60,14 @@ Play Player::do_turn(
     /*------------------------------------------------------------*/
 
     //                      A   2   3   4   5   6   7   8   9  10   J   Q   K
-    int weights[13] = {    -2, -1,  9,  8,  0,  7,  6,  5,  4, -3,  3,  2,  1};
+    //int weights[13] = {    -2, -1,  9,  8,  0,  7,  6,  5,  4, -3,  3,  2,  1};
     int highest_yet = INT_MIN;
 
     for (int i = 0; i < playable_hand.size(); i++) {
-        cout << "AI: card #" << i << " is a " << playable_hand[i] << " and is weighted " << weights[playable_hand[i]-1] << endl;
-        if (weights[playable_hand[i]-1] > highest_yet) {
+        cout << "AI: card #" << i << " is a " << playable_hand[i] << " and is weighted " << this->mid_weights[playable_hand[i]-1] << endl;
+        if (this->mid_weights[playable_hand[i]-1] > highest_yet) {
             this->card_to_play = i;
-            highest_yet = weights[playable_hand[i]-1];
+            highest_yet = this->mid_weights[playable_hand[i]-1];
         }
     }
     cout << "AI: We play #" << this->card_to_play << endl;
@@ -94,10 +94,10 @@ Play Player::do_turn(
         /*AI*/
         /*------------------------------------------------------------*/
         //                           A  2  3  4  5  6  7  8  9  10 J  Q  K 
-        int duplicate_weights[13] = {4, 1, 4, 4, 1, 4, 4, 4, 4, 1, 4, 4, 4};
+        //int duplicate_weights[13] = {4, 1, 4, 4, 1, 4, 4, 4, 4, 1, 4, 4, 4};
 
         //Choosing the amount to play based on the array "duplicate_weights"
-        this->amount_to_play = duplicate_weights[value_of_chosen_card-1];
+        this->amount_to_play = this->duplicate_weights[value_of_chosen_card-1];
 
         //Adjust for bad duplicate number input
         if (amount_to_play > duplicates_of_chosen_card) {
@@ -149,14 +149,14 @@ int Player::do_early_turn(vector<int>& all_cards) {
     /*------------------------------------------------------------*/
 
     //                      A   2   3   4   5   6   7   8   9  10   J   Q   K
-    int weights[13] = {    -2, -1,  9,  8,  0,  7,  6,  5,  4, -3,  3,  2,  1};
+    //int weights[13] = {    -2, -1,  9,  8,  0,  7,  6,  5,  4, -3,  3,  2,  1};
     int lowest_yet = INT_MAX;
 
     for (int i = 0; i < all_cards.size(); i++) {
-        cout << "AI: card #" << i << " is a " << all_cards[i] << " and is weighted " << weights[all_cards[i]-1] << endl;
-        if (weights[all_cards[i]-1] < lowest_yet) {
+        cout << "AI: card #" << i << " is a " << all_cards[i] << " and is weighted " << this->early_weights[all_cards[i]-1] << endl;
+        if (this->early_weights[all_cards[i]-1] < lowest_yet) {
             this->card_to_make_open = i;
-            lowest_yet = weights[all_cards[i]-1];
+            lowest_yet = this->early_weights[all_cards[i]-1];
         }
     }
     cout << "AI: We choose #" << this->card_to_make_open << endl;
@@ -164,4 +164,27 @@ int Player::do_early_turn(vector<int>& all_cards) {
     /*------------------------------------------------------------*/
 
     return card_to_make_open;
+}
+
+void Player::set_weights(int* earlies, int* mids, int* dupes) {
+    for(int i = 0; i < 13; i++) {
+        this->early_weights[i] = earlies[i];
+        this->mid_weights[i] = mids[i];
+        this->duplicate_weights[i] = dupes[i];
+    }
+
+    //Debug
+    cout << "Player " << this->player_number << ":" << endl;
+    for(int i = 0; i < 13; i++) {
+        cout << this->early_weights[i] << " ";
+    }
+    cout << endl;
+    for(int i = 0; i < 13; i++) {
+        cout << this->mid_weights[i] << " ";
+    }
+    cout << endl;
+    for(int i = 0; i < 13; i++) {
+        cout << this->duplicate_weights[i] << " ";
+    }
+    cout << endl;
 }

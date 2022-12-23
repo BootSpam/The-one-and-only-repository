@@ -325,6 +325,20 @@ int main() {
 
         //Game loop
         while (true) {
+            
+            //Debug
+            cout << "Weights should be" << endl;
+            for (int j = 0; j < 6; j++) {
+                for (int i = 0; i < 13; i++) {
+                    d.all_weights[j][i] = j;
+                    cout << d.all_weights[j][i] << " ";
+                }
+                cout << endl;
+            }
+
+            //Set AI weights
+            p1.set_weights(d.all_weights[0], d.all_weights[1], d.all_weights[2]);
+            p2.set_weights(d.all_weights[3], d.all_weights[4], d.all_weights[5]);
 
             //Set up game
             d.blanda();
