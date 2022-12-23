@@ -61,7 +61,17 @@ struct Deck {
     }
 
     void deal() {
-        
+
+        //Set length of vectors
+        p1_hand = {0, 0, 0};
+        p1_open = {0, 0, 0};
+        p1_hidden = {0, 0, 0};
+
+        p2_hand = {0, 0, 0};
+        p2_open = {0, 0, 0};
+        p2_hidden = {0, 0, 0};
+
+        //Deal cards
         p1_hidden[0] = draw();  p2_hidden[0] = draw();
         p1_hidden[1] = draw();  p2_hidden[1] = draw();
         p1_hidden[2] = draw();  p2_hidden[2] = draw();
@@ -297,7 +307,6 @@ struct Deck {
 
 };
 
-int game = 0;
 
 int main() {
 
@@ -311,9 +320,9 @@ int main() {
 
     d.set_random_weights();
         
+    int game = 0;
     while (game < 100){
 
-        cout << "current game count " << game << endl;
         //Game loop
         while (true) {
 
@@ -373,8 +382,19 @@ int main() {
                 d.p2_hand[i] = p2_early_cards[i];
             }
 
+            //Mid-Game
             while(true) {
+
+                //Debug -------------------------------------------
+                for (auto i : d.played_cards) {
+                    if (i > 13) {
+                        return 0;
+                    }
+                }
+                //end of Debug -------------------------------------------
+
                 turn++;
+                cout << "Debug: Game = " << game << endl;
                 cout << "Debug: Turn = " << turn << endl;
 
                 //Update open cards
