@@ -22,6 +22,7 @@ struct Deck {
     //Weights
     int all_weights[NUMBER_OF_WEIGHTS][13];
     int all_winning_weights[NUMBER_OF_WEIGHTS][13];
+    int promoted_weights;
     int standard_early_weights[13] = {-2, -1, 9, 8, 0, 7, 6, 5, 4, -3, 3, 2, 1};
     int standard_duplicate_weights[13] = {4, 1, 4, 4, 1, 4, 4, 4, 4, 1, 4, 4, 4};
 
@@ -44,9 +45,6 @@ struct Deck {
         for(int i = 0; i < 52; i++) {
             deck[i] = i % 13 + 1;
         }
-        player_turn = 1;
-        is_empty = false;
-        p1_open_mode = p2_open_mode = false;
     }
     
     void blanda() {
@@ -89,6 +87,10 @@ struct Deck {
         p1_hand[0] = draw();    p2_hand[0] = draw();
         p1_hand[1] = draw();    p2_hand[1] = draw();
         p1_hand[2] = draw();    p2_hand[2] = draw();
+        
+        player_turn = 1;
+        is_empty = false;
+        p1_open_mode = p2_open_mode = false;
 
     }
     
@@ -311,6 +313,13 @@ struct Deck {
         }
     }
 
+    void promote_weights(int index) {
+        //Take in index of winning weights
+        //Put winning weights in the array for winning weights
+        //Use int promoted_weights to track where to put in next weight
+        //PROBLEM there can be a lot more winning weights than NUMBER_OF_WEIGHTS.
+    }
+
 };
 
 
@@ -327,6 +336,7 @@ int main() {
     d.set_random_weights();
         
     int game = 0;
+    d.promoted_weights = 0;
     while (game < (NUMBER_OF_WEIGHTS*NUMBER_OF_WEIGHTS)){
 
         //Game loop
