@@ -7,6 +7,8 @@
 
 using namespace std;
 
+#define NUMBER_OF_WEIGHTS 10
+
 struct Deck {
 
     //General
@@ -16,8 +18,12 @@ struct Deck {
     int player_turn;
     vector<int> played_cards;
     bool is_empty;
-    int all_weights[10][13];
-    int all_winning_weights[10][13];
+
+    //Weights
+    int all_weights[NUMBER_OF_WEIGHTS][13];
+    int all_winning_weights[NUMBER_OF_WEIGHTS][13];
+    int standard_early_weights[13] = {-2, -1, 9, 8, 0, 7, 6, 5, 4, -3, 3, 2, 1};
+    int standard_duplicate_weights[13] = {4, 1, 4, 4, 1, 4, 4, 4, 4, 1, 4, 4, 4};
 
     //Player one
     vector<int> p1_hand = {0, 0, 0};
@@ -321,24 +327,36 @@ int main() {
     d.set_random_weights();
         
     int game = 0;
-    while (game < 100){
+    while (game < (NUMBER_OF_WEIGHTS*NUMBER_OF_WEIGHTS)){
 
         //Game loop
         while (true) {
             
-            //Debug
+            //Debug Sets weghts to fixed
             cout << "Weights should be" << endl;
-            for (int j = 0; j < 6; j++) {
+            for (int j = 0; j < NUMBER_OF_WEIGHTS; j++) {
                 for (int i = 0; i < 13; i++) {
                     d.all_weights[j][i] = j;
                     cout << d.all_weights[j][i] << " ";
                 }
                 cout << endl;
             }
+            cout << endl << "Game " << game << endl;
 
             //Set AI weights
-            p1.set_weights(d.all_weights[0], d.all_weights[1], d.all_weights[2]);
-            p2.set_weights(d.all_weights[3], d.all_weights[4], d.all_weights[5]);
+            p1.set_weights(
+                d.standard_early_weights, 
+                d.all_weights[game%NUMBER_OF_WEIGHTS], 
+                d.standard_duplicate_weights
+                );
+            p2.set_weights(
+                d.standard_early_weights, 
+                d.all_weights[game/NUMBER_OF_WEIGHTS], 
+                d.standard_duplicate_weights
+                );
+
+            //Debug
+            break;
 
             //Set up game
             d.blanda();
