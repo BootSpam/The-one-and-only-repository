@@ -2,6 +2,7 @@
 #include <vector>
 #include <algorithm>    //For shuffling deck
 #include <random>
+#include <chrono>
 
 #include "player.h"
 
@@ -303,10 +304,26 @@ struct Deck {
     }
 
     void set_random_weights() {
+
+        std::uniform_int_distribution<int> distribution(0,13);
+        unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+        std::default_random_engine generator (seed);
+
         srand(time(NULL));
         for (int i = 0; i < 10; i++) {
-            for (int j = 0; j < 13; j++) {
-                all_weights[i][j] = rand();
+            for (int j = 0; j < 14; j++) {
+
+                all_weights[i][j] = distribution(generator);
+                
+                //Making sure there are no duplicates
+                for (int check_unique = 0; check_unique < j; check_unique++)
+                {
+                    if (all_weights[i][check_unique] == all_weights[i][j])
+                    {
+                        all_weights[i][j] = distribution(generator);
+                        check_unique = -1;
+                    }
+                }
                 cout << all_weights[i][j] << " ";
             }
             cout << endl;
