@@ -310,7 +310,7 @@ struct Deck {
         std::default_random_engine generator (seed);
 
         srand(time(NULL));
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < NUMBER_OF_WEIGHTS; i++) {
             for (int j = 0; j < 14; j++) {
 
                 all_weights[i][j] = distribution(generator);
@@ -351,34 +351,27 @@ int main() {
     int early_card;
 
     d.set_random_weights();
-        
+    
+    int games_to_play = NUMBER_OF_WEIGHTS * (NUMBER_OF_WEIGHTS+1)/2;
     int game = 0;
     d.promoted_weights = 0;
-    while (game < (NUMBER_OF_WEIGHTS*NUMBER_OF_WEIGHTS)){
-
+    for (int weight_player_1 = 0; weight_player_1 < NUMBER_OF_WEIGHTS; weight_player_1 ++) {
+        for (int weight_player_2 = weight_player_1; weight_player_2 < NUMBER_OF_WEIGHTS; weight_player_2 ++) {
         //Game loop
         while (true) {
             
-            //Debug Sets weghts to fixed
-            cout << "Weights should be" << endl;
-            for (int j = 0; j < NUMBER_OF_WEIGHTS; j++) {
-                for (int i = 0; i < 13; i++) {
-                    d.all_weights[j][i] = j;
-                    cout << d.all_weights[j][i] << " ";
-                }
-                cout << endl;
-            }
+            game++;
             cout << endl << "Game " << game << endl;
 
             //Set AI weights
             p1.set_weights(
                 d.standard_early_weights, 
-                d.all_weights[game%NUMBER_OF_WEIGHTS], 
+                d.all_weights[weight_player_1], 
                 d.standard_duplicate_weights
                 );
             p2.set_weights(
                 d.standard_early_weights, 
-                d.all_weights[game/NUMBER_OF_WEIGHTS], 
+                d.all_weights[weight_player_2], 
                 d.standard_duplicate_weights
                 );
 
@@ -643,7 +636,7 @@ int main() {
 
         }
 
-        game++;
+        }
     }
     return 0;
 }
