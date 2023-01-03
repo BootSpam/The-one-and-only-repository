@@ -22,7 +22,7 @@ struct Deck {
 
     //Weights
     int all_weights[NUMBER_OF_WEIGHTS][13];
-    int all_winning_weights[NUMBER_OF_WEIGHTS][13];
+    int winning_weights[NUMBER_OF_WEIGHTS*(NUMBER_OF_WEIGHTS+1)/2][13];
     int promoted_weights;
     int standard_early_weights[13] = {-2, -1, 9, 8, 0, 7, 6, 5, 4, -3, 3, 2, 1};
     int standard_duplicate_weights[13] = {4, 1, 4, 4, 1, 4, 4, 4, 4, 1, 4, 4, 4};
@@ -305,13 +305,13 @@ struct Deck {
 
     void set_random_weights() {
 
-        std::uniform_int_distribution<int> distribution(0,13);
+        std::uniform_int_distribution<int> distribution(0,12);
         unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
         std::default_random_engine generator (seed);
 
         srand(time(NULL));
         for (int i = 0; i < NUMBER_OF_WEIGHTS; i++) {
-            for (int j = 0; j < 14; j++) {
+            for (int j = 0; j < 13; j++) {
 
                 all_weights[i][j] = distribution(generator);
                 
@@ -349,19 +349,21 @@ int main() {
     int turn;
     int early_index;
     int early_card;
+    try {
 
     d.set_random_weights();
     
-    int games_to_play = NUMBER_OF_WEIGHTS * (NUMBER_OF_WEIGHTS+1)/2;
+    int wins = 0;
     int game = 0;
     d.promoted_weights = 0;
     for (int weight_player_1 = 0; weight_player_1 < NUMBER_OF_WEIGHTS; weight_player_1 ++) {
-        for (int weight_player_2 = weight_player_1; weight_player_2 < NUMBER_OF_WEIGHTS; weight_player_2 ++) {
+        for (int weight_player_2 = weight_player_1; weight_player_2 < NUMBER_OF_WEIGHTS; wins == game ? weight_player_2 ++ : game--) {
         //Game loop
         while (true) {
             
             game++;
             cout << endl << "Game " << game << endl;
+            cout << endl << "Wins " << wins << endl;
 
             //Set AI weights
             p1.set_weights(
@@ -374,9 +376,6 @@ int main() {
                 d.all_weights[weight_player_2], 
                 d.standard_duplicate_weights
                 );
-
-            //Debug
-            break;
 
             //Set up game
             d.blanda();
@@ -604,12 +603,17 @@ int main() {
 
                 //See if anyone has won
                 if (d.p1_hand.size() == 0 && d.p1_hidden.size() == 0 && d.p1_open.size() == 0) {
+                    std::copy(std::begin(d.all_weights[weight_player_1]), std::end(d.all_weights[weight_player_1]), std::begin(d.winning_weights[wins]));
+                    wins ++;
                     cout << "P1 wins!" << endl;
                     break;
                 } else if (d.p2_hand.size() == 0 && d.p2_hidden.size() == 0 && d.p2_open.size() == 0) {
+                    std::copy(std::begin(d.all_weights[weight_player_2]), std::end(d.all_weights[weight_player_2]), std::begin(d.winning_weights[wins]));
+                    wins++;
                     cout << "P2 wins!" << endl;
                     break;
                 } else if (turn >= 200) {
+
                     cout << "Both loose" << endl;
                     break;
                 }
@@ -638,5 +642,17 @@ int main() {
 
         }
     }
+
+    cout << "List of winning weights:" << endl;
+    for(int i = 0; i < wins; i++){
+        for (int j = 0; j < 13; j++) {
+            cout << d.winning_weights[i][j] << " ";
+        }
+        cout << endl;
+    }
+    } catch (exception& e) {
+        cout << e.what() << endl;
+    }
+
     return 0;
 }
