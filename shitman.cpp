@@ -8,7 +8,7 @@
 
 using namespace std;
 
-#define NUMBER_OF_WEIGHTS 10
+#define NUMBER_OF_WEIGHTS 2
 
 struct Deck {
 
@@ -329,14 +329,6 @@ struct Deck {
             cout << endl;
         }
     }
-
-    void promote_weights(int index) {
-        //Take in index of winning weights
-        //Put winning weights in the array for winning weights
-        //Use int promoted_weights to track where to put in next weight
-        //PROBLEM there can be a lot more winning weights than NUMBER_OF_WEIGHTS.
-    }
-
 };
 
 
@@ -355,7 +347,6 @@ int main() {
     
     int wins = 0;
     int game = 0;
-    d.promoted_weights = 0;
     for (int weight_player_1 = 0; weight_player_1 < NUMBER_OF_WEIGHTS; weight_player_1 ++) {
         for (int weight_player_2 = weight_player_1; weight_player_2 < NUMBER_OF_WEIGHTS; wins == game ? weight_player_2 ++ : game--) {
         //Game loop
@@ -652,6 +643,7 @@ int main() {
     }
     } catch (exception& e) {
         cout << e.what() << endl;
+        return 0;
     }
 
     return 0;
