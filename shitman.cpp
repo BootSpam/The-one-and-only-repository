@@ -8,7 +8,8 @@
 
 using namespace std;
 
-#define NUMBER_OF_WEIGHTS 2
+#define NUMBER_OF_WEIGHTS 30
+#define NUMBER_OF_ROUNDS 8
 
 struct Deck {
 
@@ -22,8 +23,11 @@ struct Deck {
 
     //Weights
     int all_weights[NUMBER_OF_WEIGHTS][13];
+    int all_weights_wins[NUMBER_OF_WEIGHTS];
+
     int winning_weights[NUMBER_OF_WEIGHTS*(NUMBER_OF_WEIGHTS+1)/2][13];
-    int promoted_weights;
+    int counting_winning_weights[NUMBER_OF_WEIGHTS*(NUMBER_OF_WEIGHTS+1)/2][13];
+
     int standard_early_weights[13] = {-2, -1, 9, 8, 0, 7, 6, 5, 4, -3, 3, 2, 1};
     int standard_duplicate_weights[13] = {4, 1, 4, 4, 1, 4, 4, 4, 4, 1, 4, 4, 4};
 
@@ -344,7 +348,11 @@ int main() {
     try {
 
     d.set_random_weights();
-    
+
+    for (int i = 0; i < NUMBER_OF_WEIGHTS; i++)
+        d.all_weights_wins[i] = 0;
+
+    for (int round = 0; round < NUMBER_OF_ROUNDS; round++) {
     int wins = 0;
     int game = 0;
     for (int weight_player_1 = 0; weight_player_1 < NUMBER_OF_WEIGHTS; weight_player_1 ++) {
@@ -594,11 +602,13 @@ int main() {
                 //See if anyone has won
                 if (d.p1_hand.size() == 0 && d.p1_hidden.size() == 0 && d.p1_open.size() == 0) {
                     std::copy(std::begin(d.all_weights[weight_player_1]), std::end(d.all_weights[weight_player_1]), std::begin(d.winning_weights[wins]));
+                    d.all_weights_wins[weight_player_1]++;
                     wins ++;
                     cout << "P1 wins!" << endl;
                     break;
                 } else if (d.p2_hand.size() == 0 && d.p2_hidden.size() == 0 && d.p2_open.size() == 0) {
                     std::copy(std::begin(d.all_weights[weight_player_2]), std::end(d.all_weights[weight_player_2]), std::begin(d.winning_weights[wins]));
+                    d.all_weights_wins[weight_player_2]++;
                     wins++;
                     cout << "P2 wins!" << endl;
                     break;
@@ -632,14 +642,25 @@ int main() {
 
         }
     }
+}
+    // TODO - sort all_weights on all_weights_wins
 
-    cout << "List of winning weights:" << endl;
-    for(int i = 0; i < wins; i++){
-        for (int j = 0; j < 13; j++) {
-            cout << d.winning_weights[i][j] << " ";
+    cout << endl << "Amount of wins of the different sets of weights:" << endl;
+    for(int i = 0; i < NUMBER_OF_WEIGHTS; i++){
+        cout << d.all_weights_wins[i] << " - ";
+        for(int j = 1; j < 13; j++) {
+            cout << d.all_weights[i][j] << " ";
         }
         cout << endl;
     }
+
+    //TODO
+    //Save only only winning weights with most wins, in case of tie save all winners to next batch
+    //Randomize all slots not occupied with winners from previous rounds
+    //Play with enough weights to be able to say something about the 6,227,020,800 combinations
+    //Make it easy to change between early_game weights, mid_game_weights and amount_to_play
+    //THEN DONE YESSIR
+
     } catch (exception& e) {
         cout << e.what() << endl;
         return 0;
