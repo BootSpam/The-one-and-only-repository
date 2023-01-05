@@ -8,7 +8,7 @@
 
 using namespace std;
 
-#define NUMBER_OF_WEIGHTS 10
+#define NUMBER_OF_WEIGHTS 2
 
 struct Deck {
 
