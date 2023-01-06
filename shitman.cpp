@@ -643,7 +643,35 @@ int main() {
         }
     }
 }
-    // TODO - sort all_weights on all_weights_wins
+    //Sorts all_weights and all_weights_wins
+    int temporary_saved_number_of_wins = 0;
+    int temporary_saved_weights[13];
+    for(int i = 0; i < 13; i++){
+        temporary_saved_weights[i] = 0;
+    }
+
+    for(int i = 0; i < NUMBER_OF_WEIGHTS; i++){
+        for(int j = 0; j < i; j++){
+            if(d.all_weights_wins[i] > d.all_weights_wins[j]){
+                temporary_saved_number_of_wins = d.all_weights_wins[i];
+                for(int k = 0; k < 13; k++){
+                    temporary_saved_weights[k] = d.all_weights[i][k];
+                }
+                for(int l = i-1; l > j-1; l--){
+                    d.all_weights_wins[l+1] = d.all_weights_wins[l];
+                    for(int m = 0; m < 13; m++){
+                        d.all_weights[l+1][m] = d.all_weights[l][m];
+                    } 
+                }
+                d.all_weights_wins[j] = temporary_saved_number_of_wins;
+                for(int n = 0; n < 13; n++){
+                    d.all_weights[j][n] = temporary_saved_weights[n];
+                }
+                j = i;
+            }
+
+        }
+    }
 
     cout << endl << "Amount of wins of the different sets of weights:" << endl;
     for(int i = 0; i < NUMBER_OF_WEIGHTS; i++){
