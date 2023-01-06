@@ -673,10 +673,10 @@ int main() {
         }
     }
 
-    cout << endl << "Amount of wins of the different sets of weights:" << endl;
+    cout << endl << "Amount of wins for the different sets of weights:" << endl;
     for(int i = 0; i < NUMBER_OF_WEIGHTS; i++){
         cout << d.all_weights_wins[i] << " - ";
-        for(int j = 1; j < 13; j++) {
+        for(int j = 0; j < 13; j++) {
             cout << d.all_weights[i][j] << " ";
         }
         cout << endl;
