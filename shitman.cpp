@@ -9,7 +9,7 @@
 using namespace std;
 
 #define NUMBER_OF_WEIGHTS 10
-#define NUMBER_OF_ROUNDS 8
+#define NUMBER_OF_ROUNDS 5
 
 struct Deck {
 
@@ -31,6 +31,7 @@ struct Deck {
     int counting_winning_weights[NUMBER_OF_WEIGHTS*(NUMBER_OF_WEIGHTS+1)/2][13];
 
     int standard_early_weights[13] = {-2, -1, 9, 8, 0, 7, 6, 5, 4, -3, 3, 2, 1};
+    int standard_mid_weights[13] = {-2, -1, 9, 8, 0, 7, 6, 5, 4, -3, 3, 2, 1};
     int standard_duplicate_weights[13] = {4, 1, 4, 4, 1, 4, 4, 4, 4, 1, 4, 4, 4};
 
     //Player one
@@ -63,10 +64,10 @@ struct Deck {
     int draw() {
         if (index >= 51) {
             is_empty = true;
-            //cout << "Debug: index >= 51, deck is empty after this" << endl;
+            //std::cout << "Debug: index >= 51, deck is empty after this" << endl;
         }
 
-        //cout << "Debug: drawing a " << deck[index] << " index " << index << endl;
+        //std::cout << "Debug: drawing a " << deck[index] << " index " << index << endl;
         index++;
         return deck[index - 1];
     }
@@ -132,25 +133,25 @@ struct Deck {
     }
 
     int find_card_in_hand(int player, int card) {
-        //cout << "Debug: card to find = " << card << endl;
+        //std::cout << "Debug: card to find = " << card << endl;
         if (player == 1) {
             for (int i = 0; i < p1_hand.size(); i++) {
                 if (p1_hand[i] == card) {
-                    //cout << "Debug: card index = " << i << endl;
+                    //std::cout << "Debug: card index = " << i << endl;
                     return i;
                 }
             }
         } else if (player == 2) {
             for (int i = 0; i < p2_hand.size(); i++) {
                 if (p2_hand[i] == card) {
-                    //cout << "Debug: card index = " << i << endl;
+                    //std::cout << "Debug: card index = " << i << endl;
                     return i;
                 }
             }
         }
-        cout << "Error: Invalid player or card" << endl;
-        //cout << "Player: " << player << endl;
-        //cout << "Card: " << card << endl;
+        std::cout << "Error: Invalid player or card" << endl;
+        //std::cout << "Player: " << player << endl;
+        //std::cout << "Card: " << card << endl;
         
         return 0;  //Not supposed to happen
     }
@@ -159,7 +160,7 @@ struct Deck {
         //Add card to played pile
         played_cards.push_back(card);
 
-        //cout << "Debug: card layed = " << card << endl;
+        //std::cout << "Debug: card layed = " << card << endl;
 
         // check for four in a row
         std::vector<int>::reverse_iterator rit = played_cards.rbegin();
@@ -237,7 +238,7 @@ struct Deck {
                 }
             }
         } else {
-            cout << "Invalid player" << endl;
+            std::cout << "Invalid player" << endl;
         }
 
         //Switch turn
@@ -254,43 +255,43 @@ struct Deck {
 
     bool can_play(int player) {
         if (player == 1 && p1_playable.size() == 0) {
-            //cout << "Debug: Can not play" << endl;
+            //std::cout << "Debug: Can not play" << endl;
             return false;
         } else if (player == 2 && p2_playable.size() == 0) {
-            //cout << "Debug: Can not play" << endl;
+            //std::cout << "Debug: Can not play" << endl;
             return false;
         } else {
-            //cout << "Debug: Can play" << endl;
+            //std::cout << "Debug: Can play" << endl;
             return true;
         }
     }
     
     void pick_up_pile(int player) {
-        //cout << "Debug: Picking up pile" << endl;
+        //std::cout << "Debug: Picking up pile" << endl;
         if (player == 1) {
             if (p1_open_mode) {
-                //cout << "Debug: saving current hand to open" << endl;
+                //std::cout << "Debug: saving current hand to open" << endl;
                 p1_open.clear();
                 for (int i = 0; i < p1_hand.size(); i++) {
                     p1_open.push_back(p1_hand[i]);
                 }
                 p1_hand.clear();    //Must clear hand to ensure no residue open cards
                 p1_open_mode = false;
-                //cout << "Debug: p1_open_mode = false" << endl;
+                //std::cout << "Debug: p1_open_mode = false" << endl;
             }
             for (int i = 0; i < played_cards.size(); i++) {
                 p1_hand.push_back(played_cards[i]);
             }
         } else if (player == 2) {
             if (p2_open_mode) {
-                //cout << "Debug: saving current hand to open" << endl;
+                //std::cout << "Debug: saving current hand to open" << endl;
                 p2_open.clear();
                 for (int i = 0; i < p2_hand.size(); i++) {
                     p2_open.push_back(p2_hand[i]);
                 }
 		p2_hand.clear();
                 p2_open_mode = false;
-                //cout << "Debug: p2_open_mode = false" << endl;
+                //std::cout << "Debug: p2_open_mode = false" << endl;
             }
             for (int i = 0; i < played_cards.size(); i++) {
                 p2_hand.push_back(played_cards[i]);
@@ -309,9 +310,9 @@ struct Deck {
         }
     }
 
-    void set_random_weights() {
+    void set_random_weights(int random_type) {
+        std::uniform_int_distribution<int> distribution(random_type == 3 ? 1 : 0, random_type == 3 ? 4 : 12);
 
-        std::uniform_int_distribution<int> distribution(0,12);
         unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
         std::default_random_engine generator (seed);
 
@@ -322,17 +323,19 @@ struct Deck {
                 all_weights[winners][i] = distribution(generator);
                 
                 //Making sure there are no duplicates
-                for (int check_unique = 0; check_unique < i; check_unique++)
-                {
-                    if (all_weights[winners][check_unique] == all_weights[winners][i])
+                if(random_type == 1 || random_type == 2){
+                    for (int check_unique = 0; check_unique < i; check_unique++)
                     {
-                        all_weights[winners][i] = distribution(generator);
-                        check_unique = -1;
+                        if (all_weights[winners][check_unique] == all_weights[winners][i])
+                        {
+                            all_weights[winners][i] = distribution(generator);
+                            check_unique = -1;
+                        }
                     }
                 }
-                cout << all_weights[winners][i] << " ";
+                std::cout << all_weights[winners][i] << " ";
             }
-            cout << endl;
+            std::cout << endl;
         }
         winners = 0;
     }
@@ -352,11 +355,20 @@ int main() {
     string answer;
     int last_winners = 0;
 
+    int random_type;
+
+    std::cout << "Choose what of weights to randomize (1 - 3): 1 - early, 2 - mid, 3 - amount" << endl;
+    std::cin >> random_type;
+    //std::cout << "How many different weights do you want?" << endl;
+    //std::cin >> NUMBER_OF_WEIGHTS;
+    //std::cout << "How many rounds do you want to play each time?" << endl;
+    //std::cin >> NUMBER_OF_ROUNDS;
+
     do {
         d.batch++;
         try {
 
-        d.set_random_weights();
+        d.set_random_weights(random_type);
 
         for (int i = 0; i < NUMBER_OF_WEIGHTS; i++)
             d.all_weights_wins[i] = 0;
@@ -370,19 +382,19 @@ int main() {
             while (true) {
                 
                 game++;
-                cout << endl << "Game " << game << endl;
-                cout << endl << "Wins " << wins << endl;
+                std::cout << endl << "Game " << game << endl;
+                std::cout << endl << "Wins " << wins << endl;
 
                 //Set AI weights
                 p1.set_weights(
-                    d.standard_early_weights, 
-                    d.all_weights[weight_player_1], 
-                    d.standard_duplicate_weights
+                    random_type == 1 ? d.all_weights[weight_player_1] : d.standard_early_weights, 
+                    random_type == 2 ? d.all_weights[weight_player_1] : d.standard_mid_weights, 
+                    random_type == 3 ? d.all_weights[weight_player_1] : d.standard_duplicate_weights
                     );
                 p2.set_weights(
-                    d.standard_early_weights, 
-                    d.all_weights[weight_player_2], 
-                    d.standard_duplicate_weights
+                    random_type == 1 ? d.all_weights[weight_player_2] : d.standard_early_weights, 
+                    random_type == 2 ? d.all_weights[weight_player_2] : d.standard_mid_weights, 
+                    random_type == 3 ? d.all_weights[weight_player_2] : d.standard_duplicate_weights
                     );
 
                 //Set up game
@@ -391,11 +403,11 @@ int main() {
                 turn = 0;
                 
                 //Print deck
-                //cout << "Deck ";
+                //std::cout << "Deck ";
                 //for(int i = 0; i < 52; i++) {
-                    //cout << d.deck[i] << " ";
+                    //std::cout << d.deck[i] << " ";
                 //}
-                //cout << endl;
+                //std::cout << endl;
 
                 //p1 set early_cards
                 vector<int> p1_early_cards = {};
@@ -407,7 +419,7 @@ int main() {
                 }
 
                 //p1 early game loop
-                //cout << endl;
+                //std::cout << endl;
                 for(int i = 0; i < 3; i++) {
                     early_index = p1.do_early_turn(p1_early_cards);
                     early_card = p1_early_cards[early_index];
@@ -429,7 +441,7 @@ int main() {
                 }
 
                 //p2 early game loop
-                //cout << endl;
+                //std::cout << endl;
                 for(int i = 0; i < 3; i++) {
                     early_index = p2.do_early_turn(p2_early_cards);
                     early_card = p2_early_cards[early_index];
@@ -453,18 +465,18 @@ int main() {
                     //end of Debug -------------------------------------------
 
                     turn++;
-                    //cout << "Debug: Turn = " << turn << endl;
+                    //std::cout << "Debug: Turn = " << turn << endl;
 
                     //Update open cards
                     if (d.p1_open_mode) {
-                        //cout << "Debug: Updating p1_open" << endl;
+                        //std::cout << "Debug: Updating p1_open" << endl;
                         d.p1_open.clear();
                         for (int i = 0; i < d.p1_hand.size(); i++) {
                             d.p1_open.push_back(d.p1_hand[i]);
                         }
                     }
                     if (d.p2_open_mode) {
-                        //cout << "Debug: Updating p2_open" << endl;
+                        //std::cout << "Debug: Updating p2_open" << endl;
                         d.p2_open.clear();
                         for (int i = 0; i < d.p2_hand.size(); i++) {
                             d.p2_open.push_back(d.p2_hand[i]);
@@ -472,11 +484,11 @@ int main() {
                     }
 
                     //Player turns
-                    //cout << endl << "Debug: Player " << d.player_turn << endl;
+                    //std::cout << endl << "Debug: Player " << d.player_turn << endl;
                     if (d.player_turn == 1) {
                         if (d.is_empty && d.p1_hand.size() == 0) {
                             d.p1_open_mode = true;
-                            //cout << "Debug: P1_open_mode = true" << endl;
+                            //std::cout << "Debug: P1_open_mode = true" << endl;
                             for (int i = 0; i < d.p1_open.size(); i++) {
                                 d.p1_hand.push_back(d.p1_open[i]);
                             }
@@ -498,7 +510,7 @@ int main() {
                                     d.p1_hidden.size() > 1
                                     && d.legal_move(d.p1_hidden[d.p1_hidden.size()-1])
                                 ) {
-                                    //cout << "Debug: Good hidden card picked" << endl;
+                                    //std::cout << "Debug: Good hidden card picked" << endl;
 
                                     //Switch turn
                                     if (d.p1_hidden[d.p1_hidden.size()-1] != 2 && d.p1_hidden[d.p1_hidden.size()-1] != 10) {
@@ -517,7 +529,7 @@ int main() {
                                     && d.p1_hidden[d.p1_hidden.size()-1] != 5
                                     && d.p1_hidden[d.p1_hidden.size()-1] != 10
                                 ) {
-                                    //cout << "Debug: Good hidden card picked" << endl;
+                                    //std::cout << "Debug: Good hidden card picked" << endl;
 
                                     //Switch turn
                                     if (d.p1_hidden[d.p1_hidden.size()-1] != 2 && d.p1_hidden[d.p1_hidden.size()-1] != 10) {
@@ -528,7 +540,7 @@ int main() {
                                     d.p1_hidden.erase(d.p1_hidden.begin() + d.p1_hidden.size() - 1);
 
                                 } else {
-                                    //cout << "Debug: Bad hidden card picked" << endl <<
+                                    //std::cout << "Debug: Bad hidden card picked" << endl <<
                                     //"Debug: You picked a " << d.p1_hidden[d.p1_hidden.size()-1] << endl;
 
                                     d.played_cards.push_back(d.p1_hidden[d.p1_hidden.size()-1]);
@@ -542,7 +554,7 @@ int main() {
                     } else if (d.player_turn == 2) {
                         if (d.is_empty && d.p2_hand.size() == 0){
                             d.p2_open_mode = true;
-                            //cout << "Debug: P2_open_mode = true" << endl;
+                            //std::cout << "Debug: P2_open_mode = true" << endl;
                             for (int i = 0; i < d.p2_open.size(); i++) {
                                 d.p2_hand.push_back(d.p2_open[i]);
                             }
@@ -564,7 +576,7 @@ int main() {
                                     d.p2_hidden.size() > 1
                                     && d.legal_move(d.p2_hidden[d.p2_hidden.size()-1])
                                 ) {
-                                    //cout << "Debug: Good hidden card picked" << endl;
+                                    //std::cout << "Debug: Good hidden card picked" << endl;
 
                                     //Switch turn
                                     if (d.p2_hidden[d.p2_hidden.size()-1] != 2 && d.p2_hidden[d.p2_hidden.size()-1] != 10) {
@@ -582,7 +594,7 @@ int main() {
                                     && d.p2_hidden[d.p2_hidden.size()-1] != 5
                                     && d.p2_hidden[d.p2_hidden.size()-1] != 10
                                 ) {
-                                    //cout << "Debug: Good hidden card picked" << endl;
+                                    //std::cout << "Debug: Good hidden card picked" << endl;
 
                                     //Switch turn
                                     if (d.p2_hidden[d.p2_hidden.size()-1] != 2 && d.p2_hidden[d.p2_hidden.size()-1] != 10) {
@@ -593,7 +605,7 @@ int main() {
                                     d.p2_hidden.erase(d.p2_hidden.begin() + d.p2_hidden.size() - 1);
 
                                 } else {
-                                    //cout << "Debug: Bad hidden card picked" << endl <<
+                                    //std::cout << "Debug: Bad hidden card picked" << endl <<
                                     //"Debug: You picked a " << d.p2_hidden[d.p2_hidden.size()-1] << endl;
 
                                     d.played_cards.push_back(d.p2_hidden[d.p2_hidden.size()-1]);
@@ -605,7 +617,7 @@ int main() {
                             }
                         }
                     } else {
-                        cout << "Error: player_turn = " << d.player_turn << endl;
+                        std::cout << "Error: player_turn = " << d.player_turn << endl;
                     }
 
                     //See if anyone has won
@@ -613,17 +625,17 @@ int main() {
                         std::copy(std::begin(d.all_weights[weight_player_1]), std::end(d.all_weights[weight_player_1]), std::begin(d.winning_weights[wins]));
                         d.all_weights_wins[weight_player_1]++;
                         wins ++;
-                        cout << "P1 wins!" << endl;
+                        std::cout << "P1 wins!" << endl;
                         break;
                     } else if (d.p2_hand.size() == 0 && d.p2_hidden.size() == 0 && d.p2_open.size() == 0) {
                         std::copy(std::begin(d.all_weights[weight_player_2]), std::end(d.all_weights[weight_player_2]), std::begin(d.winning_weights[wins]));
                         d.all_weights_wins[weight_player_2]++;
                         wins++;
-                        cout << "P2 wins!" << endl;
+                        std::cout << "P2 wins!" << endl;
                         break;
                     } else if (turn >= 200) {
 
-                        cout << "Both loose" << endl;
+                        std::cout << "Both loose" << endl;
                         break;
                     }
 
@@ -638,7 +650,7 @@ int main() {
                         int i;
                         for (rit = total_cards.rbegin(), i = 0; rit!= total_cards.rend(), i < 9, 1 == *rit || 2 == *rit || 5 == *rit; ++rit, ++i) {
                             if (i == total_cards.size() -1) {
-                                cout << "Infinite loop yay" << endl;
+                                std::cout << "Infinite loop yay" << endl;
                                 break;
                             }
                         }
@@ -654,18 +666,18 @@ int main() {
     }
 
         //displays winners from last batch
-        cout << endl << endl;
+        std::cout << endl << endl;
         if(d.batch > 1){
-            cout << "Last winner/winners:" << endl;
+            std::cout << "Last winner/winners:" << endl;
             for(int i = 0; i < last_winners; i++){
                 for(int j = 0; j < 13; j++){
-                    cout << d.all_weights[i][j] << " ";
+                    std::cout << d.all_weights[i][j] << " ";
                 }
-                cout << endl;
+                std::cout << endl;
             }
         }
 
-        cout << "Batch: " << d.batch << endl;
+        std::cout << "Batch: " << d.batch << endl;
 
         //Sorts all_weights and all_weights_wins
         int temporary_saved_number_of_wins = 0;
@@ -697,13 +709,13 @@ int main() {
             }
         }
 
-        cout << endl << "Amount of wins for the different sets of weights:" << endl;
+        std::cout << endl << "Amount of wins for the different sets of weights:" << endl;
         for(int i = 0; i < NUMBER_OF_WEIGHTS; i++){
-            cout << d.all_weights_wins[i] << " - ";
+            std::cout << d.all_weights_wins[i] << " - ";
             for(int j = 0; j < 13; j++) {
-                cout << d.all_weights[i][j] << " ";
+                std::cout << d.all_weights[i][j] << " ";
             }
-            cout << endl;
+            std::cout << endl;
         }
 
         //Prepares winners for a new set of games
@@ -725,16 +737,11 @@ int main() {
 
         d.winners = last_winners;
 
-        cout << "Another batch? (yes or no)" << endl;
-        cin >> answer;
-        
-        //TODO
-        //Play with enough weights to be able to say something about the 6,227,020,800 combinations
-        //Make it easy to change between early_game weights, mid_game_weights and amount_to_play
-        //THEN DONE YESSIR
+        std::cout << "Another batch? (yes or no)" << endl;
+        std::cin >> answer;
 
         } catch (exception& e) {
-            cout << e.what() << endl;
+            std::cout << e.what() << endl;
             return 0;
         }
     }
