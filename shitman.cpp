@@ -339,14 +339,6 @@ struct Deck {
         }
         winners = 0;
     }
-
-    void display_weights(int i) {
-        for(int j = 0; j < 13; j++) {
-            all_weights[i][j] < 10 ? cout << "  " : cout << " ";
-            std::cout << all_weights[i][j];
-        }
-        std::cout << endl;
-    }
 };
 
 
@@ -360,13 +352,16 @@ int main() {
     int early_index;
     int early_card;
 
-    string answer;
+    int answer;
+    string answer_2;
     int last_winners = 0;
 
     int random_type;
 
     std::cout << "Choose what of weights to randomize (1 - 3): 1 - early, 2 - mid, 3 - amount" << endl;
     std::cin >> random_type;
+    std::cout << "How many batches?" << endl;
+    std::cin >> answer;
     //std::cout << "How many different weights do you want?" << endl;
     //std::cin >> NUMBER_OF_WEIGHTS;
     //std::cout << "How many rounds do you want to play each time?" << endl;
@@ -734,8 +729,10 @@ int main() {
         std::cout << endl << "Amount of wins for the different sets of weights:" << endl;
         for(int i = 0; i < NUMBER_OF_WEIGHTS; i++){
             std::cout << d.all_weights_wins[i] << " - ";
-            if (d.all_weights_wins[i] < 100) {cout << " ";}
-            d.display_weights(i);
+            for(int j = 0; j < 13; j++) {
+                std::cout << d.all_weights[i][j] << " ";
+            }
+            std::cout << endl;
         }
 
         //Prepares winners for a new set of games
@@ -757,15 +754,19 @@ int main() {
 
         d.winners = last_winners;
 
-        std::cout << "Another batch? (yes or no)" << endl;
-        std::cin >> answer;
+        //std::cout << "Another batch? (yes or no)" << endl;
+        //std::cin >> answer;
 
         } catch (exception& e) {
             std::cout << e.what() << endl;
             return 0;
         }
+        if(d.batch == answer){
+        cout << "Another one? (yes/no)";
+        cin >> answer_2;
+        }
     }
-    while(answer == "yes" || answer == "Yes" || answer == "y" || answer == "Y");
 
+    while(d.batch < answer || answer_2 == "yes" || answer_2 == "Yes" || answer_2 == "y" || answer_2 == "Y");
     return 0;
 }
