@@ -382,7 +382,7 @@ int main() {
         int wins = 0;
         int game = 0;
         for (int weight_player_1 = 0; weight_player_1 < NUMBER_OF_WEIGHTS; weight_player_1 ++) {
-            for (int weight_player_2 = weight_player_1; weight_player_2 < NUMBER_OF_WEIGHTS; wins == game ? weight_player_2 ++ : game--) {
+            for (int weight_player_2 = weight_player_1+1; weight_player_2 < NUMBER_OF_WEIGHTS; wins == game ? weight_player_2 ++ : game--) {
             //Game loop
             while (true) {
                 
@@ -764,9 +764,9 @@ int main() {
         if(d.batch == answer){
         cout << "Another one? (yes/no)";
         cin >> answer_2;
+        answer++;
         }
     }
-
     while(d.batch < answer || answer_2 == "yes" || answer_2 == "Yes" || answer_2 == "y" || answer_2 == "Y");
     return 0;
 }
