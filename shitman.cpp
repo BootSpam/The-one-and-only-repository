@@ -339,6 +339,14 @@ struct Deck {
         }
         winners = 0;
     }
+
+    void display_weights(int i) {
+        for(int j = 0; j < 13; j++) {
+            all_weights[i][j] < 10 ? cout << "  " : cout << " ";
+            std::cout << all_weights[i][j];
+        }
+        std::cout << endl;
+    }
 };
 
 
@@ -382,8 +390,8 @@ int main() {
             while (true) {
                 
                 game++;
-                std::cout << endl << "Game " << game << endl;
-                std::cout << endl << "Wins " << wins << endl;
+                //std::cout << endl << "Game " << game << endl;
+                //std::cout << endl << "Wins " << wins << endl;
 
                 //Set AI weights
                 p1.set_weights(
@@ -625,17 +633,17 @@ int main() {
                         std::copy(std::begin(d.all_weights[weight_player_1]), std::end(d.all_weights[weight_player_1]), std::begin(d.winning_weights[wins]));
                         d.all_weights_wins[weight_player_1]++;
                         wins ++;
-                        std::cout << "P1 wins!" << endl;
+                        //std::cout << "P1 wins!" << endl;
                         break;
                     } else if (d.p2_hand.size() == 0 && d.p2_hidden.size() == 0 && d.p2_open.size() == 0) {
                         std::copy(std::begin(d.all_weights[weight_player_2]), std::end(d.all_weights[weight_player_2]), std::begin(d.winning_weights[wins]));
                         d.all_weights_wins[weight_player_2]++;
                         wins++;
-                        std::cout << "P2 wins!" << endl;
+                        //std::cout << "P2 wins!" << endl;
                         break;
                     } else if (turn >= 200) {
 
-                        std::cout << "Both loose" << endl;
+                        //std::cout << "Both loose" << endl;
                         break;
                     }
 
@@ -650,7 +658,7 @@ int main() {
                         int i;
                         for (rit = total_cards.rbegin(), i = 0; rit!= total_cards.rend(), i < 9, 1 == *rit || 2 == *rit || 5 == *rit; ++rit, ++i) {
                             if (i == total_cards.size() -1) {
-                                std::cout << "Infinite loop yay" << endl;
+                                //std::cout << "Infinite loop yay" << endl;
                                 break;
                             }
                         }
@@ -724,10 +732,8 @@ int main() {
         std::cout << endl << "Amount of wins for the different sets of weights:" << endl;
         for(int i = 0; i < NUMBER_OF_WEIGHTS; i++){
             std::cout << d.all_weights_wins[i] << " - ";
-            for(int j = 0; j < 13; j++) {
-                std::cout << d.all_weights[i][j] << " ";
-            }
-            std::cout << endl;
+            if (d.all_weights_wins[i] < 100) {cout << " ";}
+            d.display_weights(i);
         }
 
         //Prepares winners for a new set of games
