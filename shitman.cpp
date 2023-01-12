@@ -8,8 +8,8 @@
 
 using namespace std;
 
-#define NUMBER_OF_WEIGHTS 10
-#define NUMBER_OF_ROUNDS 5
+#define NUMBER_OF_WEIGHTS 40
+#define NUMBER_OF_ROUNDS 10
 
 struct Deck {
 
@@ -317,7 +317,7 @@ struct Deck {
         std::default_random_engine generator (seed);
 
         srand(time(NULL));
-        for (winners; winners < NUMBER_OF_WEIGHTS; winners++) {
+        for (winners; winners < NUMBER_OF_WEIGHTS-3; winners++) {
             for (int i = 0; i < 13; i++) {
 
                 all_weights[winners][i] = distribution(generator);
@@ -668,8 +668,20 @@ int main() {
         //displays winners from last batch
         std::cout << endl << endl;
         if(d.batch > 1){
-            std::cout << "Last winner/winners:" << endl;
+            std::cout << "Last winners:" << endl;
             for(int i = 0; i < last_winners; i++){
+                for(int j = 0; j < 13; j++){
+                    std::cout << d.all_weights[i][j] << " ";
+                }
+                std::cout << endl;
+            }
+        }
+
+        //displays loserss from last batch
+        std::cout << endl << endl;
+        if(d.batch > 1){
+            std::cout << "Last losers:" << endl;
+            for(int i = NUMBER_OF_WEIGHTS-3; i < NUMBER_OF_WEIGHTS; i++){
                 for(int j = 0; j < 13; j++){
                     std::cout << d.all_weights[i][j] << " ";
                 }
@@ -719,17 +731,17 @@ int main() {
         }
 
         //Prepares winners for a new set of games
-        d.winners = 0;
+        d.winners = 3;
         
-        for(int i = 0; i < NUMBER_OF_WEIGHTS; i++){
-            if(d.all_weights_wins[i] == d.all_weights_wins[0]){
+        for(int i = 3; i < NUMBER_OF_WEIGHTS; i++){
+            if(d.all_weights_wins[i] == d.all_weights_wins[2]){
                 d.winners++;
             }
         }
         
         last_winners = d.winners;
 
-        for(d.winners; d.winners < NUMBER_OF_WEIGHTS; d.winners++){
+        for(d.winners; d.winners < NUMBER_OF_WEIGHTS-3; d.winners++){
             for(int i = 0; i < 13; i++){
                 d.all_weights[d.winners][i] = 0;
             }
