@@ -317,7 +317,7 @@ struct Deck {
         std::default_random_engine generator (seed);
 
         srand(time(NULL));
-        for (winners; winners < NUMBER_OF_WEIGHTS-3; winners++) {
+        for (winners; batch > 1 ? winners < NUMBER_OF_WEIGHTS-3 : winners < NUMBER_OF_WEIGHTS ; winners++) {
             for (int i = 0; i < 13; i++) {
 
                 all_weights[winners][i] = distribution(generator);
@@ -333,9 +333,9 @@ struct Deck {
                         }
                     }
                 }
-                std::cout << all_weights[winners][i] << " ";
+                //std::cout << all_weights[winners][i] << " ";
             }
-            std::cout << endl;
+            //std::cout << endl;
         }
         winners = 0;
     }
@@ -374,6 +374,8 @@ int main() {
             d.all_weights_wins[i] = 0;
 
         for (int round = 0; round < NUMBER_OF_ROUNDS; round++) {
+        int completion = round * 10;
+        cout << completion << "% done" << endl;
         int wins = 0;
         int game = 0;
         for (int weight_player_1 = 0; weight_player_1 < NUMBER_OF_WEIGHTS; weight_player_1 ++) {
@@ -382,8 +384,8 @@ int main() {
             while (true) {
                 
                 game++;
-                std::cout << endl << "Game " << game << endl;
-                std::cout << endl << "Wins " << wins << endl;
+                //std::cout << endl << "Game " << game << endl;
+                //std::cout << endl << "Wins " << wins << endl;
 
                 //Set AI weights
                 p1.set_weights(
@@ -625,17 +627,17 @@ int main() {
                         std::copy(std::begin(d.all_weights[weight_player_1]), std::end(d.all_weights[weight_player_1]), std::begin(d.winning_weights[wins]));
                         d.all_weights_wins[weight_player_1]++;
                         wins ++;
-                        std::cout << "P1 wins!" << endl;
+                        //std::cout << "P1 wins!" << endl;
                         break;
                     } else if (d.p2_hand.size() == 0 && d.p2_hidden.size() == 0 && d.p2_open.size() == 0) {
                         std::copy(std::begin(d.all_weights[weight_player_2]), std::end(d.all_weights[weight_player_2]), std::begin(d.winning_weights[wins]));
                         d.all_weights_wins[weight_player_2]++;
                         wins++;
-                        std::cout << "P2 wins!" << endl;
+                        //std::cout << "P2 wins!" << endl;
                         break;
                     } else if (turn >= 200) {
 
-                        std::cout << "Both loose" << endl;
+                        //std::cout << "Both loose" << endl;
                         break;
                     }
 
@@ -650,7 +652,7 @@ int main() {
                         int i;
                         for (rit = total_cards.rbegin(), i = 0; rit!= total_cards.rend(), i < 9, 1 == *rit || 2 == *rit || 5 == *rit; ++rit, ++i) {
                             if (i == total_cards.size() -1) {
-                                std::cout << "Infinite loop yay" << endl;
+                                //std::cout << "Infinite loop yay" << endl;
                                 break;
                             }
                         }
