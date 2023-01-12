@@ -339,6 +339,14 @@ struct Deck {
         }
         winners = 0;
     }
+
+    void display_weights(int i) {
+        for(int j = 0; j < 13; j++) {
+            all_weights[i][j] < 10 ? cout << "  " : cout << " ";
+            std::cout << all_weights[i][j];
+        }
+        std::cout << endl;
+    }
 };
 
 
@@ -726,10 +734,8 @@ int main() {
         std::cout << endl << "Amount of wins for the different sets of weights:" << endl;
         for(int i = 0; i < NUMBER_OF_WEIGHTS; i++){
             std::cout << d.all_weights_wins[i] << " - ";
-            for(int j = 0; j < 13; j++) {
-                std::cout << d.all_weights[i][j] << " ";
-            }
-            std::cout << endl;
+            if (d.all_weights_wins[i] < 100) {cout << " ";}
+            d.display_weights(i);
         }
 
         //Prepares winners for a new set of games
