@@ -761,12 +761,21 @@ int main() {
             std::cout << e.what() << endl;
             return 0;
         }
+        //if(d.batch == answer){
+        //cout << "Another one? (yes/no)";
+        //cin >> answer_2;
+        //if (answer_2 == "yes" || answer_2 == "Yes" || answer_2 == "y" || answer_2 == "Y"){
+        //    answer++;
+        //}
+        //}
+
         if(d.batch == answer){
-        cout << "Another one? (yes/no)";
-        cin >> answer_2;
-        answer++;
+            d.winners = 0;
+            d.batch = 0;
+
         }
+
     }
-    while(d.batch < answer || answer_2 == "yes" || answer_2 == "Yes" || answer_2 == "y" || answer_2 == "Y");
+    while(d.batch < answer);
     return 0;
 }
