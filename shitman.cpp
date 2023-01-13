@@ -3,6 +3,7 @@
 #include <algorithm>    //For shuffling deck
 #include <random>
 #include <chrono>
+#include <fstream>
 
 #include "player.h"
 
@@ -10,6 +11,7 @@ using namespace std;
 
 #define NUMBER_OF_WEIGHTS 40
 #define NUMBER_OF_ROUNDS 10
+#define BATHCES_OF_BATCHES 10
 
 struct Deck {
 
@@ -22,6 +24,7 @@ struct Deck {
     bool is_empty;
     int batch = 0;
     int winners = 0;
+    int batches_of_batches = 0;
 
     //Weights
     int all_weights[NUMBER_OF_WEIGHTS][13];
@@ -355,6 +358,8 @@ int main() {
     int answer;
     string answer_2;
     int last_winners = 0;
+    fstream winner_file("winners.txt");
+    fstream loser_file("losers.txt");
 
     int random_type;
 
@@ -695,6 +700,7 @@ int main() {
         }
 
         std::cout << "Batch: " << d.batch << endl;
+        cout << "Batches of batches: " << d.batches_of_batches << endl;
 
         //Sorts all_weights and all_weights_wins
         int temporary_saved_number_of_wins = 0;
@@ -770,9 +776,32 @@ int main() {
         //}
 
         if(d.batch == answer){
+
+            //Write down winners
+            for (int i = 0; i < d.winners; i++) {
+                for (int j = 0; j < 13; j++) {
+                    winner_file << d.all_weights[i][j] << " ";
+                }
+                winner_file << "\n";
+            }
+            
+            //Write down losers
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 13; j++) {
+                    loser_file << d.all_weights[NUMBER_OF_WEIGHTS - 1 - i][j] << " ";
+                }
+                loser_file << "\n";
+            }
+
             d.winners = 0;
             d.batch = 0;
+            d.batches_of_batches++;
 
+            if (d.batches_of_batches >= BATHCES_OF_BATCHES) {
+                winner_file.close();
+                loser_file.close();
+                return 0;
+            }
         }
 
     }
