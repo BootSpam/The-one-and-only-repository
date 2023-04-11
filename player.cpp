@@ -2,6 +2,7 @@
 #include <iostream>
 #include <vector>
 #include <stdlib.h>
+#include <limits.h>     //New for AI
 
 using namespace std;
 Play Player::do_turn(
@@ -13,45 +14,65 @@ Play Player::do_turn(
 	    int last_played
     ) {
     
+    //std::cout << "Debug: do_turn succesfully called" << endl;
+    
     Play play;
 
     //Display for human player
-    cout << "Player " << player_number << endl
-        << "Last played " << last_played << endl;
+    //std::cout << "Player " << player_number << endl
+        //<< "Last played " << last_played << endl;
     
-    cout << "Playable hand ";
-    for (int i = 0; i < playable_hand.size(); i++) {
-        cout << playable_hand[i] << " ";
-    }
-    cout << endl;
+    //std::cout << "Playable hand ";
+    //for (int i = 0; i < playable_hand.size(); i++) {
+        //std::cout << playable_hand[i] << " ";
+    //}
+    //std::cout << endl;
 
-    cout << "Real hand ";
-    for (int i = 0; i < real_hand.size(); i++) {
-        cout << real_hand[i] << " ";
-    }
-    cout << endl;
+    //std::cout << "Real hand ";
+    //for (int i = 0; i < real_hand.size(); i++) {
+        //std::cout << real_hand[i] << " ";
+    //}
+    //std::cout << endl;
     
-    cout << "Played cards ";
-    for (int i = 0; i < played_cards.size(); i++) {
-	    cout << played_cards[i] << " ";
-    }
-    cout << endl;
+    //std::cout << "Played cards ";
+    //for (int i = 0; i < played_cards.size(); i++) {
+	    //std::cout << played_cards[i] << " ";
+    //}
+    //std::cout << endl;
 
-    cout << "Your open cards "; 
-    for (int i = 0; i < your_open.size(); i++) {
-        cout << your_open[i] << " ";
-    }
-    cout << endl;
+    //std::cout << "Your open cards "; 
+    //for (int i = 0; i < your_open.size(); i++) {
+        //std::cout << your_open[i] << " ";
+   // }
+    //std::cout << endl;
 
-    cout << "Opponents open cards ";
-    for (int i = 0; i < opponents_open.size(); i++) {
-        cout << opponents_open[i] << " ";
-    }
-    cout << endl;
+    //std::cout << "Opponents open cards ";
+    //for (int i = 0; i < opponents_open.size(); i++) {
+        //std::cout << opponents_open[i] << " ";
+    //}
+    //std::cout << endl;
 
     //Player input
-    cout << "Play a card [0-" << playable_hand.size()-1 << "] ";
-    cin >> this->card_to_play;
+    //std::cout << "Play a card [0-" << playable_hand.size()-1 << "] " << endl;
+    //std::cin >> this->card_to_play;
+    
+    /*AI*/
+    /*------------------------------------------------------------*/
+
+    //                      A   2   3   4   5   6   7   8   9  10   J   Q   K
+    //int weights[13] = {    -2, -1,  9,  8,  0,  7,  6,  5,  4, -3,  3,  2,  1};
+    int highest_yet = INT_MIN;
+
+    for (int i = 0; i < playable_hand.size(); i++) {
+        //std::cout << "AI: card #" << i << " is a " << playable_hand[i] << " and is weighted " << this->mid_weights[playable_hand[i]-1] << endl;
+        if (this->mid_weights[playable_hand[i]-1] > highest_yet) {
+            this->card_to_play = i;
+            highest_yet = this->mid_weights[playable_hand[i]-1];
+        }
+    }
+    //std::cout << "AI: We play #" << this->card_to_play << endl;
+
+    /*------------------------------------------------------------*/
 
     //Declarations to deal with duplicates
     int duplicates_of_chosen_card = 0;
@@ -67,49 +88,103 @@ Play Player::do_turn(
 
     // Optionally play duplicates
     if (duplicates_of_chosen_card > 1) {
-        cout << "How many? [1-" << duplicates_of_chosen_card << "] ";
-        cin >> this->amount_to_play;
+        //std::cout << "How many? [1-" << duplicates_of_chosen_card << "] " << endl;
+        //std::cin >> this->amount_to_play;
+
+        /*AI*/
+        /*------------------------------------------------------------*/
+        //                           A  2  3  4  5  6  7  8  9  10 J  Q  K 
+        //int duplicate_weights[13] = {4, 1, 4, 4, 1, 4, 4, 4, 4, 1, 4, 4, 4};
+
+        //Choosing the amount to play based on the array "duplicate_weights"
+        this->amount_to_play = this->duplicate_weights[value_of_chosen_card-1];
+
+        //Adjust for bad duplicate number input
+        if (amount_to_play > duplicates_of_chosen_card) {
+            amount_to_play = duplicates_of_chosen_card;
+        }
+        if (amount_to_play < 1) {
+            amount_to_play = 1;
+        }
+
+        //std::cout << "AI: We play " << this->amount_to_play << " of the " << value_of_chosen_card << " cards" << endl;
+
+        /*------------------------------------------------------------*/
     }
 
     //Adjust for bad card number input
     if (playable_hand.size() == 0) {
-        cout << "Error: No playable cards" << endl;
+        //std::cout << "Error: No playable cards" << endl;
         return play;
     } else {
         card_to_play = card_to_play % playable_hand.size();
-        cout << "Debug: card_to_play = " << card_to_play << endl;
+        //std::cout << "Debug: card_to_play = " << card_to_play << endl;
     }
 
-    //Adjust for bad duplicate number input
-    if (amount_to_play > duplicates_of_chosen_card) {
-        amount_to_play = duplicates_of_chosen_card;
-    }
-    if (amount_to_play < 1) {
-        amount_to_play = 1;
-    }
-    cout << "Debug: amount_to_play = " << amount_to_play << endl;
+    //std::cout << "Debug: amount_to_play = " << amount_to_play << endl;
 
     play.card_value = playable_hand[card_to_play];
     play.amount = amount_to_play;
 
-    cout << "Debug: played card value = " << play.card_value << endl;
-    cout << "Debug: played amount = " << play.amount << endl;
+    //std::cout << "Debug: played card value = " << play.card_value << endl;
+    //std::cout << "Debug: played amount = " << play.amount << endl;
 
     return play;
 }
 
 int Player::do_early_turn(vector<int>& all_cards) {
     
-    cout << "Player " << player_number << endl
-    << "Chose an open card: ";
-    for (int i = 0; i < all_cards.size(); i++) {
-        cout << all_cards[i] << " ";
-    }
-    cout << endl;
+    //std::cout << "Player " << player_number << endl
+    //<< "Chose an open card: ";
+    //for (int i = 0; i < all_cards.size(); i++) {
+        //std::cout << all_cards[i] << " ";
+    //}
+   // std::cout << endl;
     
     //Player input
-    cout << "Pick a card [0-" << all_cards.size()-1 << "] ";
-    cin >> this->card_to_make_open;
+    //std::cout << "Pick a card [0-" << all_cards.size()-1 << "] " << endl;
+    //std::cin >> this->card_to_make_open;
+
+    /*AI*/
+    /*------------------------------------------------------------*/
+
+    //                      A   2   3   4   5   6   7   8   9  10   J   Q   K
+    //int weights[13] = {    -2, -1,  9,  8,  0,  7,  6,  5,  4, -3,  3,  2,  1};
+    int lowest_yet = INT_MAX;
+
+    for (int i = 0; i < all_cards.size(); i++) {
+        //std::cout << "AI: card #" << i << " is a " << all_cards[i] << " and is weighted " << this->early_weights[all_cards[i]-1] << endl;
+        if (this->early_weights[all_cards[i]-1] < lowest_yet) {
+            this->card_to_make_open = i;
+            lowest_yet = this->early_weights[all_cards[i]-1];
+        }
+    }
+    //std::cout << "AI: We choose #" << this->card_to_make_open << endl;
+
+    /*------------------------------------------------------------*/
 
     return card_to_make_open;
+}
+
+void Player::set_weights(int* earlies, int* mids, int* dupes) {
+    for(int i = 0; i < 13; i++) {
+        this->early_weights[i] = earlies[i];
+        this->mid_weights[i] = mids[i];
+        this->duplicate_weights[i] = dupes[i];
+    }
+
+    //Debug
+    //std::cout << "Player " << this->player_number << ":" << endl;
+    //for(int i = 0; i < 13; i++) {
+        //std::cout << this->early_weights[i] << " ";
+    //}
+    //std::cout << endl;
+    //for(int i = 0; i < 13; i++) {
+        //std::cout << this->mid_weights[i] << " ";
+    //}
+    //std::cout << endl;
+    //for(int i = 0; i < 13; i++) {
+        //std::cout << this->duplicate_weights[i] << " ";
+    //}
+    //std::cout << endl;
 }
